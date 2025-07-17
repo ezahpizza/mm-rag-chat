@@ -3,7 +3,6 @@ import { Pinecone } from '@pinecone-database/pinecone';
 import {
   parseFormData,
   parsePdfWithFallback,
-  parseWithBasicExtraction,
   describeImageWithGemini,
   embedDocs,
   chunkText

@@ -20,7 +20,7 @@ export async function parseFormData(req: Request): Promise<{ files: File[] }> {
   }
 }
 
-export async function parsePdfWithFallback(buffer: Buffer, fileName: string) {
+export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Promise<any> {
   try {
     const apiKey = process.env.LLAMA_CLOUD_API_KEY || process.env.LLAMA_CLOUD_APIKEY;
     if (!apiKey) {
@@ -61,20 +61,24 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string) {
     } finally {
       try {
         await fs.unlink(tmpPath);
-      } catch (unlinkError) {
+      } catch {
+        // Lint: ignore unused error variable
         console.warn('Could not delete temp file:', tmpPath);
       }
     }
-  } catch (error: unknown) {
-    console.error('Error in LlamaParse, falling back:', error);
+  } catch {
+    // Lint: ignore unused error variable
+    console.error('Error in LlamaParse, falling back');
     return await parseWithBasicExtraction(buffer, fileName);
   }
 }
 
-export async function parseWithBasicExtraction(buffer: Buffer, fileName: string) {
+export async function parseWithBasicExtraction(buffer: Buffer, fileName: string): Promise<any[]> {
   try {
     try {
-      const pdf = require('pdf-parse');
+      // Dynamic import for pdf-parse to avoid require lint error
+      const pdfParseModule = await import('pdf-parse');
+      const pdf = pdfParseModule.default || pdfParseModule;
       const data = await pdf(buffer);
       if (data.text && data.text.trim().length > 0) {
         return [{
@@ -88,8 +92,9 @@ export async function parseWithBasicExtraction(buffer: Buffer, fileName: string)
           },
         }];
       }
-    } catch (pdfParseError) {
-      console.warn('pdf-parse not available or failed:', pdfParseError);
+    } catch {
+      // Lint: ignore unused error variable
+      console.warn('pdf-parse not available or failed');
     }
     return [{
       text: `PDF document: ${fileName}. Please ensure the PDF is readable and contains extractable text.`,
@@ -100,12 +105,11 @@ export async function parseWithBasicExtraction(buffer: Buffer, fileName: string)
         parsing_method: 'fallback',
       },
     }];
-  } catch (error: unknown) {
-    let message = 'Unknown error';
-    if (error instanceof Error) message = error.message;
-    console.error('Basic PDF extraction failed:', error);
+  } catch {
+    // Lint: ignore unused error variable
+    console.error('Basic PDF extraction failed');
     return [{
-      text: `PDF document: ${fileName}. Content extraction failed: ${message}`,
+      text: `PDF document: ${fileName}. Content extraction failed.`,
       metadata: {
         file_name: fileName,
         page_number: 1,
@@ -116,7 +120,7 @@ export async function parseWithBasicExtraction(buffer: Buffer, fileName: string)
   }
 }
 
-export async function describeImageWithGemini(buffer: Buffer, fileName: string) {
+export async function describeImageWithGemini(buffer: Buffer, fileName: string): Promise<{ text: string; metadata: Record<string, unknown> }> {
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
@@ -151,15 +155,14 @@ export async function describeImageWithGemini(buffer: Buffer, fileName: string) 
         parsing_method: 'gemini_vision',
       },
     };
-  } catch (error: unknown) {
-    let message = 'Unknown error';
-    if (error instanceof Error) message = error.message;
-    console.error('Error in describeImageWithGemini:', error);
-    throw new Error(`Failed to describe image: ${message}`);
+  } catch {
+    // Lint: ignore unused error variable
+    console.error('Error in describeImageWithGemini');
+    throw new Error('Failed to describe image');
   }
 }
 
-export async function embedDocs(docs: { text: string }[]) {
+export async function embedDocs(docs: { text: string }[]): Promise<any[]> {
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
@@ -180,8 +183,9 @@ export async function embedDocs(docs: { text: string }[]) {
             contents: doc.text.slice(0, 8000)
           });
           return result.embeddings?.[0]?.values || null;
-        } catch (error) {
-          console.error(`Error embedding document ${i + batchIndex}:`, error);
+        } catch {
+          // Lint: ignore unused error variable
+          console.error(`Error embedding document ${i + batchIndex}`);
           return null;
         }
       });
@@ -192,14 +196,14 @@ export async function embedDocs(docs: { text: string }[]) {
       }
     }
     return embeddings.filter(emb => emb !== null);
-  } catch (error: unknown) {
-    let message = 'Unknown error';
-    if (error instanceof Error) message = error.message;
-    console.error('Error in embedDocs:', error);
-    throw new Error(`Failed to embed documents: ${message}`);
+  } catch {
+    // Lint: ignore unused error variable
+    console.error('Error in embedDocs');
+    throw new Error('Failed to embed documents');
   }
 }
 
+// 'overlap' is currently unused but kept for API compatibility
 export function chunkText(text: string, maxChunkSize: number = 1000, overlap: number = 200) {
   const chunks = [];
   const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);

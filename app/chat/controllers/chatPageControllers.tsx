@@ -34,7 +34,7 @@ export async function handleUpload(
     } else {
       setIndexStatus(data.message || 'Indexing failed.');
     }
-  } catch (err) {
+  } catch {
     setIndexStatus('Indexing failed.');
   } finally {
     setUploading(false);
@@ -86,7 +86,7 @@ export async function handleSend(
         citations: citationsArray,
       },
     ]);
-  } catch (err) {
+  } catch {
     setMessages((msgs: Message[]) => [
       ...msgs,
       { role: 'bot', text: 'Sorry, there was an error processing your request.' },
