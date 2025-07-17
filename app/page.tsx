@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { Button } from '../components/ui';
 
 export default function HomePage() {
   return (
@@ -10,5 +12,4 @@ export default function HomePage() {
     </main>
   );
 }
-import Link from 'next/link';
-import { Button } from '../components/ui';
+
