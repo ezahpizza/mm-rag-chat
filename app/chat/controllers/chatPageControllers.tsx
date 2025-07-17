@@ -1,5 +1,11 @@
 import { Dispatch, SetStateAction, RefObject } from 'react';
 import { cleanBotResponse, cleanCitationText, cleanCitationSource, Citation } from './chatPageHelpers';
+
+export interface Message {
+  role: 'user' | 'bot';
+  text: string;
+  citations?: Citation[];
+}
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
@@ -37,13 +43,13 @@ export async function handleUpload(
 
 export async function handleSend(
   input: string,
-  setMessages: Dispatch<SetStateAction<any[]>>,
+  setMessages: Dispatch<SetStateAction<Message[]>>,
   setLoading: Dispatch<SetStateAction<boolean>>,
   setInput: Dispatch<SetStateAction<string>>,
-  messages: any[]
+  messages: Message[]
 ) {
   if (!input.trim()) return;
-  setMessages((msgs: any[]) => [...msgs, { role: 'user', text: input }]);
+  setMessages((msgs: Message[]) => [...msgs, { role: 'user', text: input }]);
   setLoading(true);
   try {
     const res = await fetch('/api/chat', {
@@ -72,7 +78,7 @@ export async function handleSend(
       answerText = data.answer || 'No response received';
       citationsArray = data.citations || [];
     }
-    setMessages((msgs: any[]) => [
+    setMessages((msgs: Message[]) => [
       ...msgs,
       {
         role: 'bot',
@@ -81,7 +87,7 @@ export async function handleSend(
       },
     ]);
   } catch (err) {
-    setMessages((msgs: any[]) => [
+    setMessages((msgs: Message[]) => [
       ...msgs,
       { role: 'bot', text: 'Sorry, there was an error processing your request.' },
     ]);

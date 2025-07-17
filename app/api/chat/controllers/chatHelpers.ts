@@ -53,8 +53,16 @@ export async function embedQuery(query: string): Promise<number[]> {
   }
 }
 
+// Tavily search result type
+export interface TavilyResult {
+  content?: string;
+  snippet?: string;
+  url?: string;
+  [key: string]: unknown;
+}
+
 // Search Tavily for web results
-export async function searchTavily(query: string): Promise<any[]> {
+export async function searchTavily(query: string): Promise<TavilyResult[]> {
   const tavilyApiKey = process.env.TAVILY_API_KEY;
   if (!tavilyApiKey) {
     console.warn('Missing Tavily API key, skipping web search');
@@ -88,8 +96,16 @@ export async function searchTavily(query: string): Promise<any[]> {
   }
 }
 
+// Citation type for responses
+export interface Citation {
+  text: string;
+  citation: string;
+  sourceType: string;
+  score: number;
+}
+
 // Generate response using Gemini
-export async function generateResponse(prompt: string): Promise<{ answer: string; citations: any[] }> {
+export async function generateResponse(prompt: string): Promise<{ answer: string; citations: Citation[] }> {
   const apiKey = process.env.GOOGLE_API_KEY;
   if (!apiKey) {
     throw new Error('Missing Google API key');

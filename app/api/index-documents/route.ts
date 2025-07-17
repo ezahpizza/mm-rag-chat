@@ -32,7 +32,11 @@ export async function POST(req: Request) {
     const pinecone = new Pinecone({ apiKey: pineconeApiKey });
     const index = pinecone.Index(PINECONE_INDEX);
     
-    let allDocs: any[] = [];
+    interface Doc {
+      text: string;
+      metadata: Record<string, unknown>;
+    }
+    let allDocs: Doc[] = [];
 
     // Process files
     for (const file of files) {
@@ -44,7 +48,7 @@ export async function POST(req: Request) {
         const fileName = file.name;
         const mimetype = file.type;
 
-        let fileDocs: any[] = [];
+        let fileDocs: Doc[] = [];
 
         if (mimetype === 'application/pdf') {
           fileDocs = await parsePdfWithFallback(buffer, fileName);
@@ -85,10 +89,12 @@ export async function POST(req: Request) {
 
         allDocs = allDocs.concat(chunkedDocs);
         
-      } catch (fileError: any) {
+      } catch (fileError: unknown) {
+        let message = 'Unknown error';
+        if (fileError instanceof Error) message = fileError.message;
         console.error(`Error processing file ${file.name}:`, fileError);
         return NextResponse.json({ 
-          message: `Failed to process file ${file.name}: ${fileError.message}` 
+          message: `Failed to process file ${file.name}: ${message}` 
         }, { status: 400 });
       }
     }
@@ -158,10 +164,12 @@ export async function POST(req: Request) {
       }
     });
     
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let message = 'Unknown error';
+    if (error instanceof Error) message = error.message;
     console.error('Error in POST handler:', error);
     return NextResponse.json({ 
-      message: error.message || 'Indexing failed.' 
+      message: message || 'Indexing failed.' 
     }, { status: 500 });
   }
 }

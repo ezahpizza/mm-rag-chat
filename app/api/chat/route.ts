@@ -5,7 +5,9 @@ import {
   cleanText,
   embedQuery,
   searchTavily,
-  generateResponse
+  generateResponse,
+  Citation,
+  TavilyResult
 } from './controllers/chatHelpers';
 
 const PINECONE_INDEX = 'multimodal-rag-demo';
@@ -47,9 +49,9 @@ export async function POST(req: Request) {
     ]);
 
     // Process RAG results
-    const ragChunks = ragResults.matches?.map((match: any) => ({
-      text: cleanText(match.metadata?.text || ''), 
-      citation: match.metadata?.file_name 
+    const ragChunks: Citation[] = ragResults.matches?.map((match: { metadata?: { text?: string; file_name?: string; page_number?: number }; score?: number }) => ({
+      text: cleanText(match.metadata?.text || ''),
+      citation: match.metadata?.file_name
         ? `${match.metadata.file_name}${match.metadata.page_number ? ' p.' + match.metadata.page_number : ''}`
         : 'Unknown source',
       sourceType: 'internal',
@@ -57,18 +59,18 @@ export async function POST(req: Request) {
     })) || [];
 
     // Process web results
-    const webChunks = webResults.map((result: any) => ({
+    const webChunks: Citation[] = (webResults as TavilyResult[]).map((result) => ({
       text: cleanText(result.content || result.snippet || ''),
       citation: result.url || '',
       sourceType: 'web',
-      score: 0.8, 
+      score: 0.8,
     }));
 
     // Combine and sort by relevance
     const allChunks = [...ragChunks, ...webChunks];
     
     // Re-rank by embedding similarity if we have embeddings
-    let topChunks: { text: any; citation: any; sourceType: string; score: any; }[] = [];
+    let topChunks: Citation[] = [];
     
     if (queryEmbedding.length > 0) {
       const chunksWithEmbeddings = [];
@@ -142,10 +144,15 @@ Provide your response as JSON with:
       citations: formattedCitations,
     });
 
-  } catch (error: any) {
-    console.error('Error in chat handler:', error);
-    return NextResponse.json({ 
-      message: error.message || 'Chat processing failed.' 
-    }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error in chat handler:', error);
+      return NextResponse.json({ 
+        message: error.message || 'Chat processing failed.' 
+      }, { status: 500 });
+    } else {
+      console.error('Unknown error in chat handler:', error);
+      return NextResponse.json({ message: 'Chat processing failed.' }, { status: 500 });
+    }
   }
 }

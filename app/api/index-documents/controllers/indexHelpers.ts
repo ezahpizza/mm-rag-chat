@@ -44,7 +44,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string) {
         console.warn('No documents parsed with LlamaParse, using fallback');
         return await parseWithBasicExtraction(buffer, fileName);
       }
-      return docs.map((doc: any, index: number) => {
+      return docs.map((doc: { getText?: () => string; text?: string; metadata?: Record<string, unknown> }, index: number) => {
         const text = doc.getText ? doc.getText() : doc.text || '';
         const metadata = doc.metadata || {};
         return {
@@ -65,7 +65,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string) {
         console.warn('Could not delete temp file:', tmpPath);
       }
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in LlamaParse, falling back:', error);
     return await parseWithBasicExtraction(buffer, fileName);
   }
@@ -100,10 +100,12 @@ export async function parseWithBasicExtraction(buffer: Buffer, fileName: string)
         parsing_method: 'fallback',
       },
     }];
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let message = 'Unknown error';
+    if (error instanceof Error) message = error.message;
     console.error('Basic PDF extraction failed:', error);
     return [{
-      text: `PDF document: ${fileName}. Content extraction failed: ${error.message}`,
+      text: `PDF document: ${fileName}. Content extraction failed: ${message}`,
       metadata: {
         file_name: fileName,
         page_number: 1,
@@ -149,9 +151,11 @@ export async function describeImageWithGemini(buffer: Buffer, fileName: string) 
         parsing_method: 'gemini_vision',
       },
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let message = 'Unknown error';
+    if (error instanceof Error) message = error.message;
     console.error('Error in describeImageWithGemini:', error);
-    throw new Error(`Failed to describe image: ${error.message}`);
+    throw new Error(`Failed to describe image: ${message}`);
   }
 }
 
@@ -188,9 +192,11 @@ export async function embedDocs(docs: { text: string }[]) {
       }
     }
     return embeddings.filter(emb => emb !== null);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    let message = 'Unknown error';
+    if (error instanceof Error) message = error.message;
     console.error('Error in embedDocs:', error);
-    throw new Error(`Failed to embed documents: ${error.message}`);
+    throw new Error(`Failed to embed documents: ${message}`);
   }
 }
 
