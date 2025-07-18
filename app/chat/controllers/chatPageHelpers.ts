@@ -39,12 +39,23 @@ export function cleanCitationText(text: string): string {
 
 export function cleanCitationSource(citation: string): string {
   if (!citation) return '';
+
+  // Return early for HTTP links
   if (citation.startsWith('http')) {
     return citation;
   }
-  const match = citation.match(/^(.+?\.(pdf|png|jpe?g))\s+p\.(\d+)/i);
+
+  // Updated regex to find a filename and page number within the string,
+  // ignoring potential surrounding OCR artifacts.
+  const match = citation.match(/([\w-]+\.(?:pdf|png|jpe?g))\s+p\.(\d+)/i);
+
+  // If a match is found, reconstruct the clean source string.
+  // match[1] captures the filename (e.g., "indus-report-3.pdf")
+  // match[2] captures the page number (e.g., "7")
   if (match) {
-    return `${match[1]} p.${match[3]}`;
+    return `${match[1]} p.${match[2]}`;
   }
+
+  // If no match, return the original citation as a fallback.
   return citation;
 }

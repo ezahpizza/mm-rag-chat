@@ -98,30 +98,33 @@ export async function handleSend(
 }
 
 
+// In your chatPageControllers.tsx file
+
 export function formatBotResponse(answer: string, citations: Citation[] = []) {
   const cleanAnswer = cleanBotResponse(answer);
   const validCitations = citations.filter(citation => {
     const cleanText = cleanCitationText(citation.text);
     return cleanText.length > 0;
   });
+
   return (
     <div className="space-y-3 overflow-hidden">
-      <div className="prose prose-sm max-w-none text-sm overflow-hidden">
-        <ReactMarkdown 
+      <div className="prose prose-sm max-w-none text-sm overflow-hidden text-gray-100">
+        <ReactMarkdown
           components={{
             p: ({ children }) => <p className="mb-2 leading-relaxed break-words">{children}</p>,
             strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
             em: ({ children }) => <em className="italic">{children}</em>,
-            code: ({ children }) => <code className="bg-gray-100 px-1 py-0.5 rounded text-xs break-all">{children}</code>,
-            pre: ({ children }) => <pre className="bg-gray-100 p-2 rounded text-xs overflow-x-auto">{children}</pre>,
+            code: ({ children }) => <code className="bg-gray-700 text-gray-200 px-1 py-0.5 rounded text-xs break-all">{children}</code>,
+            pre: ({ children }) => <pre className="bg-gray-800 p-2 rounded text-xs overflow-x-auto">{children}</pre>,
           }}
         >
           {cleanAnswer}
         </ReactMarkdown>
       </div>
       {validCitations && validCitations.length > 0 && (
-        <div className="text-xs border-t border-gray-200 pt-2 mt-3 overflow-hidden">
-          <div className="font-semibold text-gray-600 mb-2">Sources:</div>
+        <div className="text-xs border-t border-gray-700 pt-2 mt-3 overflow-hidden">
+          <div className="font-semibold text-gray-400 mb-2">Sources:</div>
           <div className="space-y-2">
             {validCitations.map((citation, index) => {
               const cleanText = cleanCitationText(citation.text);
@@ -129,26 +132,26 @@ export function formatBotResponse(answer: string, citations: Citation[] = []) {
               return (
                 <div key={index} className="flex flex-col gap-1 overflow-hidden">
                   <div className="flex items-start gap-2 overflow-hidden">
-                    <span className="text-blue-600 font-medium flex-shrink-0">[{index + 1}]</span>
+                    <span className="text-blue-400 font-medium flex-shrink-0">[{index + 1}]</span>
                     <div className="min-w-0 flex-1 overflow-hidden">
                       {cleanSource && cleanSource.startsWith('http') ? (
-                        <a 
-                          href={cleanSource} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-blue-500 hover:text-blue-700 underline text-xs break-all block"
+                        <a
+                          href={cleanSource}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 underline text-xs break-all block"
                         >
                           {cleanSource}
                         </a>
                       ) : (
-                        <span className="text-gray-100 px-2 py-1 rounded text-xs font-mono break-all block">
+                        <span className="text-gray-300 px-2 py-1 rounded text-xs font-mono break-all block">
                           {cleanSource}
                         </span>
                       )}
                     </div>
                   </div>
                   {cleanText && (
-                    <p className="text-gray-100 text-xs ml-6 leading-relaxed break-words overflow-hidden">
+                    <p className="text-gray-400 text-xs ml-6 leading-relaxed break-words overflow-hidden">
                       {cleanText}
                     </p>
                   )}
