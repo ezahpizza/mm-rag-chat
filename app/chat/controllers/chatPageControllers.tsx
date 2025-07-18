@@ -46,7 +46,7 @@ export async function handleSend(
   setMessages: Dispatch<SetStateAction<Message[]>>,
   setLoading: Dispatch<SetStateAction<boolean>>,
   setInput: Dispatch<SetStateAction<string>>,
-  messages: Message[]
+  _messages: Message[]
 ) {
   if (!input.trim()) return;
   setMessages((msgs: Message[]) => [...msgs, { role: 'user', text: input }]);

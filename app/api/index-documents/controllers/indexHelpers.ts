@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import { LlamaParseReader } from '@llamaindex/cloud';
-import { promises as fs } from 'fs';
+import { writeFile, unlink } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 
@@ -20,7 +20,7 @@ export async function parseFormData(req: Request): Promise<{ files: File[] }> {
   }
 }
 
-export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Promise<any> {
+export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
   try {
     const apiKey = process.env.LLAMA_CLOUD_API_KEY || process.env.LLAMA_CLOUD_APIKEY;
     if (!apiKey) {
@@ -35,7 +35,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Pr
     const tmpDir = os.tmpdir();
     const fileExtension = path.extname(fileName) || '.pdf';
     const tmpPath = path.join(tmpDir, `${Date.now()}-${Math.random().toString(36).substr(2, 9)}${fileExtension}`);
-    await fs.writeFile(tmpPath, buffer);
+    await writeFile(tmpPath, buffer);
     try {
       console.log('Starting LlamaParse for:', fileName);
       const docs = await reader.loadData(tmpPath);
@@ -60,7 +60,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Pr
       }).filter(doc => doc.text.length > 0);
     } finally {
       try {
-        await fs.unlink(tmpPath);
+        await unlink(tmpPath);
       } catch {
         // Lint: ignore unused error variable
         console.warn('Could not delete temp file:', tmpPath);
@@ -73,7 +73,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Pr
   }
 }
 
-export async function parseWithBasicExtraction(buffer: Buffer, fileName: string): Promise<any[]> {
+export async function parseWithBasicExtraction(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
   try {
     try {
       // Dynamic import for pdf-parse to avoid require lint error
@@ -162,7 +162,7 @@ export async function describeImageWithGemini(buffer: Buffer, fileName: string):
   }
 }
 
-export async function embedDocs(docs: { text: string }[]): Promise<any[]> {
+export async function embedDocs(docs: { text: string }[]): Promise<number[][]> {
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
@@ -204,7 +204,7 @@ export async function embedDocs(docs: { text: string }[]): Promise<any[]> {
 }
 
 // 'overlap' is currently unused but kept for API compatibility
-export function chunkText(text: string, maxChunkSize: number = 1000, overlap: number = 200) {
+export function chunkText(text: string, maxChunkSize: number = 1000, _overlap: number = 200) {
   const chunks = [];
   const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
   let currentChunk = '';
