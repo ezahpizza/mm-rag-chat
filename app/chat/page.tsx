@@ -22,6 +22,7 @@ export default function ChatPage() {
   const [indexStatus, setIndexStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null!);
+  const PROXY_URL = process.env.PROXY_URL;
   
   // WebSocket and recording state
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -31,7 +32,8 @@ export default function ChatPage() {
 
   // WebSocket connection handling
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8000/ws');
+    const socketUrl = PROXY_URL || 'ws://localhost:8000/ws';
+    const socket = new WebSocket(socketUrl);
     setWs(socket);
 
     socket.onopen = () => console.log('Connected to FastAPI WebSocket proxy.');

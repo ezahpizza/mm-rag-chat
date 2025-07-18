@@ -12,8 +12,6 @@ import {
 
 const PINECONE_INDEX = 'multimodal-rag-demo';
 
-// ...existing code...
-
 export async function POST(req: Request) {
   try {
     const { query_text } = await req.json();
