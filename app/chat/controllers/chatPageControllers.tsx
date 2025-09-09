@@ -1,13 +1,13 @@
-import { Dispatch, SetStateAction, RefObject } from 'react';
+import React, { Dispatch, SetStateAction, RefObject } from 'react';
 import { cleanBotResponse, cleanCitationText, cleanCitationSource, Citation } from './chatPageHelpers';
+import ReactMarkdown from 'react-markdown';
 
 export interface Message {
   role: 'user' | 'bot';
   text: string;
   citations?: Citation[];
 }
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
+
 
 export async function handleUpload(
   e: React.FormEvent,
@@ -46,7 +46,6 @@ export async function handleSend(
   setMessages: Dispatch<SetStateAction<Message[]>>,
   setLoading: Dispatch<SetStateAction<boolean>>,
   setInput: Dispatch<SetStateAction<string>>,
-  _messages: Message[]
 ) {
   if (!input.trim()) return;
   setMessages((msgs: Message[]) => [...msgs, { role: 'user', text: input }]);
@@ -96,9 +95,6 @@ export async function handleSend(
     setInput('');
   }
 }
-
-
-// In your chatPageControllers.tsx file
 
 export function formatBotResponse(answer: string, citations: Citation[] = []) {
   const cleanAnswer = cleanBotResponse(answer);

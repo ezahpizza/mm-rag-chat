@@ -203,6 +203,7 @@ export async function embedDocs(docs: { text: string }[]): Promise<number[][]> {
   }
 }
 
+// Lint: ignore unused error variable
 // 'overlap' is currently unused but kept for API compatibility
 export function chunkText(text: string, maxChunkSize: number = 1000, _overlap: number = 200) {
   const chunks = [];
