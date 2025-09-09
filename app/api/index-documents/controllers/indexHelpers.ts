@@ -1,4 +1,5 @@
-import { GoogleGenAI } from '@google/genai';
+import { google } from '@ai-sdk/google';
+import { generateText } from 'ai';
 import { LlamaParseReader } from '@llamaindex/cloud';
 import { writeFile, unlink } from 'fs/promises';
 import os from 'os';
@@ -126,80 +127,47 @@ export async function describeImageWithGemini(buffer: Buffer, fileName: string):
     if (!apiKey) {
       throw new Error('Missing Google API key');
     }
-    const genAI = new GoogleGenAI({apiKey});
-    const prompt = `You are an expert at describing images for RAG systems. Provide a detailed, factual description of this image, focusing on:\n- Any text content visible in the image\n- Charts, graphs, or data visualizations\n- Key visual elements and their relationships\n- Technical details if it's a diagram or schematic\n- Context that would be useful for search and retrieval\n\nBe concise but comprehensive. Do not speculate or add information not visible in the image.`;
+
+    const prompt = `You are an expert at describing images for RAG systems. Provide a detailed, factual description of this image, focusing on:
+- Any text content visible in the image
+- Charts, graphs, or data visualizations
+- Key visual elements and their relationships
+- Technical details if it's a diagram or schematic
+- Context that would be useful for search and retrieval
+
+Be concise but comprehensive. Do not speculate or add information not visible in the image.`;
+
     const base64Image = buffer.toString('base64');
     const mimeType = fileName.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
-    const result = await genAI.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [
+
+    // Use AI SDK for image analysis
+    const { text } = await generateText({
+      model: google('gemini-2.5-flash'),
+      messages: [
         {
-          parts: [
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
             {
-              inlineData: {
-                mimeType,
-                data: base64Image,
-              },
+              type: 'image',
+              image: `data:${mimeType};base64,${base64Image}`,
             },
-            { text: prompt }
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     });
-    const text = result.text || 'No description available.';
+
     return {
-      text: text.trim(),
+      text: text.trim() || 'No description available.',
       metadata: {
         file_name: fileName,
         content_type: 'image_description',
         parsing_method: 'gemini_vision',
       },
     };
-  } catch {
-    // Lint: ignore unused error variable
-    console.error('Error in describeImageWithGemini');
+  } catch (error) {
+    console.error('Error in describeImageWithGemini:', error);
     throw new Error('Failed to describe image');
-  }
-}
-
-export async function embedDocs(docs: { text: string }[]): Promise<number[][]> {
-  try {
-    const apiKey = process.env.GOOGLE_API_KEY;
-    if (!apiKey) {
-      throw new Error('Missing Google API key');
-    }
-    const genAI = new GoogleGenAI({apiKey});
-    const embeddings = [];
-    const batchSize = 5;
-    for (let i = 0; i < docs.length; i += batchSize) {
-      const batch = docs.slice(i, i + batchSize);
-      const batchPromises = batch.map(async (doc, batchIndex) => {
-        try {
-          if (batchIndex > 0) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-          }
-          const result = await genAI.models.embedContent({
-            model: 'text-embedding-004',
-            contents: doc.text.slice(0, 8000)
-          });
-          return result.embeddings?.[0]?.values || null;
-        } catch {
-          // Lint: ignore unused error variable
-          console.error(`Error embedding document ${i + batchIndex}`);
-          return null;
-        }
-      });
-      const batchEmbeddings = await Promise.all(batchPromises);
-      embeddings.push(...batchEmbeddings);
-      if (i + batchSize < docs.length) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-      }
-    }
-    return embeddings.filter(emb => emb !== null);
-  } catch {
-    // Lint: ignore unused error variable
-    console.error('Error in embedDocs');
-    throw new Error('Failed to embed documents');
   }
 }
 

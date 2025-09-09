@@ -1,16 +1,51 @@
 import { NextResponse } from 'next/server';
 import { Pinecone } from '@pinecone-database/pinecone';
+import { google } from '@ai-sdk/google';
+import { embed } from 'ai';
 import {
   parseFormData,
   parsePdfWithFallback,
   describeImageWithGemini,
-  embedDocs,
   chunkText
 } from './controllers/indexHelpers';
 
 const PINECONE_INDEX = 'multimodal-rag-demo';
 
 export const maxDuration = 60;
+
+// Interface for document structure
+interface Doc {
+  text: string;
+  metadata: Record<string, unknown>;
+}
+
+// Embed documents using AI SDK
+async function embedDocs(docs: Doc[]): Promise<number[][]> {
+  try {
+    const embeddings = [];
+    
+    // Process embeddings in batches to avoid rate limits
+    const batchSize = 5;
+    for (let i = 0; i < docs.length; i += batchSize) {
+      const batch = docs.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (doc) => {
+        const { embedding } = await embed({
+          model: google.textEmbeddingModel('text-embedding-004') as any,
+          value: doc.text,
+        });
+        return embedding;
+      });
+      
+      const batchEmbeddings = await Promise.all(batchPromises);
+      embeddings.push(...batchEmbeddings);
+    }
+    
+    return embeddings;
+  } catch (error) {
+    console.error('Error embedding documents:', error);
+    throw new Error('Failed to embed documents');
+  }
+}
 
 export async function POST(req: Request) {
   try {

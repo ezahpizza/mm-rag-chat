@@ -8,7 +8,6 @@ export interface Message {
   citations?: Citation[];
 }
 
-
 export async function handleUpload(
   e: React.FormEvent,
   fileInputRef: RefObject<HTMLInputElement>,

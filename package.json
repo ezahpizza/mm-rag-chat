@@ -9,11 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@google/genai": "^1.10.0",
+    "@ai-sdk/google": "1.0.0",
     "@llamaindex/core": "^0.6.15",
     "@llamaindex/node-parser": "^2.0.15",
     "@llamaindex/pinecone": "^0.1.15",
     "@llamaindex/readers": "^3.1.14",
+    "@llamaindex/vercel": "^0.1.20",
     "@pinecone-database/pinecone": "^6.1.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
@@ -42,23 +43,32 @@
     "@radix-ui/react-toggle": "^1.1.0",
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
+    "ai": "4.0.0",
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "formidable": "^3.5.4",
     "framer-motion": "^12.23.6",
     "llamaindex": "^0.11.19",
     "lucide-react": "^0.525.0",
+    "motion": "^12.23.12",
     "next": "15.4.1",
     "pdf-parse": "^1.1.1",
+    "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-day-picker": "^9.8.0",
     "react-dom": "19.1.0",
+    "react-icons": "^5.5.0",
     "react-markdown": "^10.1.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.13",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@llamaindex/cloud": "^4.1.2",
+    "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^20",
     "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19",
@@ -67,7 +77,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }

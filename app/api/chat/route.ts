@@ -1,156 +1,128 @@
-import { NextResponse } from 'next/server';
-import { Pinecone } from '@pinecone-database/pinecone';
-import {
-  cosineSimilarity,
-  cleanText,
-  embedQuery,
-  searchTavily,
-  generateResponse,
-  Citation,
-  TavilyResult
-} from './controllers/chatHelpers';
+import { google } from '@ai-sdk/google';
+import { streamText, convertToCoreMessages } from 'ai';
+import { createTavilyTool } from './tools/tavily';
+import { createRAGTool } from './tools/rag';
 
-const PINECONE_INDEX = 'multimodal-rag-demo';
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
-    const { query_text } = await req.json();
+    const { messages } = await req.json();
     
-    if (!query_text) {
-      return NextResponse.json({ message: 'No query_text provided.' }, { status: 400 });
+    if (!messages || !Array.isArray(messages)) {
+      return new Response('Invalid messages format', { status: 400 });
     }
 
-    console.log('Processing query:', query_text);
+    console.log('Processing chat request with', messages.length, 'messages');
 
-    // Initialize Pinecone
-    const pineconeApiKey = process.env.PINECONE_API_KEY;
-    if (!pineconeApiKey) {
-      return NextResponse.json({ message: 'Missing Pinecone API key' }, { status: 500 });
-    }
-
-    const pinecone = new Pinecone({ apiKey: pineconeApiKey });
-    const index = pinecone.Index(PINECONE_INDEX);
-
-    // Embed the query
-    const queryEmbedding = await embedQuery(query_text);
-
-    // Search both RAG and web in parallel
-    const [ragResults, webResults] = await Promise.all([
-      // Search Pinecone
-      index.query({
-        vector: queryEmbedding,
-        topK: 10,
-        includeMetadata: true,
-      }),
-      // Search web
-      searchTavily(query_text),
-    ]);
-
-    // Process RAG results
-    const ragChunks: Citation[] = ragResults.matches?.map((match: { metadata?: { text?: string; file_name?: string; page_number?: number }; score?: number }) => ({
-      text: cleanText(match.metadata?.text || ''),
-      citation: match.metadata?.file_name
-        ? `${match.metadata.file_name}${match.metadata.page_number ? ' p.' + match.metadata.page_number : ''}`
-        : 'Unknown source',
-      sourceType: 'internal',
-      score: match.score || 0,
-    })) || [];
-
-    // Process web results
-    const webChunks: Citation[] = (webResults as TavilyResult[]).map((result) => ({
-      text: cleanText(result.content || result.snippet || ''),
-      citation: result.url || '',
-      sourceType: 'web',
-      score: 0.8,
-    }));
-
-    // Combine and sort by relevance
-    const allChunks = [...ragChunks, ...webChunks];
+    // Test without tools first, then add them back
+    let result;
     
-    // Re-rank by embedding similarity if we have embeddings
-    let topChunks: Citation[] = [];
-    
-    if (queryEmbedding.length > 0) {
-      const chunksWithEmbeddings = [];
+    try {
+      // Try with tools but set toolChoice to 'none' initially
+      const ragTool = createRAGTool();
+      const tavilyTool = createTavilyTool();
       
-      for (const chunk of allChunks) {
-        if (chunk.text.trim().length > 0) {
-          try {
-            const chunkEmbedding = await embedQuery(chunk.text);
-            const similarity = cosineSimilarity(queryEmbedding, chunkEmbedding);
-            chunksWithEmbeddings.push({ ...chunk, score: similarity });
-          } catch (error) {
-            console.error('Error embedding chunk:', error);
-            chunksWithEmbeddings.push({ ...chunk, score: chunk.score || 0 });
-          }
-        }
-      }
-      
-      // Sort by score and take top 5
-      chunksWithEmbeddings.sort((a, b) => b.score - a.score);
-      topChunks = chunksWithEmbeddings.slice(0, 5);
-    } else {
-      topChunks = allChunks.slice(0, 5);
-    }
+      console.log('Tools created successfully: Documents (RAG) and Web (Tavily)');
 
-    // Filter out empty chunks
-    const validChunks = topChunks.filter(chunk => chunk.text.trim().length > 0);
+      result = await streamText({
+        model: google('gemini-2.5-flash'),
+        messages: convertToCoreMessages(messages),
+        tools: {
+          Documents: ragTool,
+          Web: tavilyTool,
+        },
+        toolChoice: 'auto',
+        maxSteps: 5,
+        system: `You are **Lexi**, an intelligent legal document assistant powered by multimodal generative AI. Your role is to **simplify, explain, and analyze complex legal documents** so that users can clearly understand their rights, obligations, and potential risks.
 
-    if (validChunks.length === 0) {
-      return NextResponse.json({
-        answer: "I couldn't find relevant information to answer your question. Please try rephrasing or check if documents have been uploaded.",
-        citations: [],
+ **TOOL SELECTION PRIORITY**
+
+1. **Documents Tool (Primary)**
+
+   * Always use the Documents tool first when queries involve:
+
+     * Uploaded contracts, agreements, scanned legal files, or resumes.
+     * Specific clauses, names, terms, or details that are likely in the knowledge base.
+     * Requests for explanation, simplification, or comparison of uploaded text.
+     * Specific document analysis or evaluation
+
+2. **Web Tool (Secondary)**
+
+   * Use only if:
+
+     * Query requires current regulations, case law, or policy updates.
+     * Supplementary context is needed beyond what documents provide after document search
+     * User explicitly requests external information (e.g., “latest Indian rental law”).
+
+ **CRITICAL INSTRUCTIONS**
+
+1. **Always prioritize the user’s uploaded documents** before external sources.
+2. **When parsing clauses:**
+
+   * Break them into **plain-language explanations**.
+   * Identify potential **risks, obligations, or unusual terms**.
+   * Offer examples where appropriate.
+3. **Never provide legal advice.** Instead, frame outputs as **informational guidance** (e.g., “This clause suggests…” instead of “You should…”).
+4. **Maintain privacy-first reasoning:** never assume or expose unrelated personal data.
+5. Always conclude responses with a **clear, structured summary** and, if relevant, **suggested next steps** (e.g., “You may want to clarify this clause with a legal professional”).
+
+
+ **RESPONSE FLOW**
+
+1. Detect intent: Is the user asking about a **document, clause, or general law?**
+2. If documents are relevant → **query Documents tool first**.
+3. Summarize findings → simplify into **tiered clarity**:
+
+   * Clause meaning (plain English)
+   * Why it matters (risk/obligation/opportunity)
+   * Actionable takeaway
+4. If broader context needed → supplement with Web tool.
+5. Synthesize results into a **cohesive, context-aware explanation**, not just excerpts.
+6. Present output in **structured, easy-to-skim format** (e.g., headings, bullet points, highlights).
+
+ **OUTPUT STYLE**
+
+* Clear, neutral, professional tone.
+* Use **everyday language** unless legal terms are unavoidable (and explain them if used).
+* When comparing multiple documents, present findings in a **side-by-side or bullet comparison**.
+* Always label information sources (Document vs Web).
+`,
+        temperature: 0.3,
+      });
+    } catch (toolError) {
+      console.error('Error with tools, falling back to simple response:', toolError);
+      // Fallback to simple response without tools
+      result = await streamText({
+        model: google('gemini-2.5-flash'),
+        messages: convertToCoreMessages(messages),
+        system: `You are a helpful AI assistant. Provide clear and concise responses.`,
+        temperature: 0.7,
       });
     }
 
-    // Build context for the prompt
-    const contextText = validChunks
-      .map((chunk, i) => `[${i + 1}] ${chunk.text}\nSource: ${chunk.citation}\n`)
-      .join('\n');
+    console.log('StreamText result created successfully');
+    return result.toDataStreamResponse();
 
-    const prompt = `You are a helpful assistant. Using the following context, answer the user's question accurately and concisely. 
-
-Important instructions:
-1. Base your answer ONLY on the provided context
-2. If you can't find relevant information in the context, say so
-3. Include inline citations using [1], [2], etc. format
-4. Keep your answer under 150 words
-5. Respond in JSON format with "answer" and "citations" fields
-
-User question: ${query_text}
-
-Context:
-${contextText}
-
-Provide your response as JSON with:
-- "answer": your response with inline citations
-- "citations": array of objects with "text" (relevant excerpt) and "citation" (source reference)`;
-
-    // Generate response
-    const { answer, citations } = await generateResponse(prompt);
-
-    // Format citations for frontend
-    const formattedCitations = citations.length > 0 
-      ? citations 
-      : validChunks.map(chunk => ({
-          text: chunk.text.slice(0, 100) + (chunk.text.length > 100 ? '...' : ''),
-          citation: chunk.citation,
-        }));
-
-    return NextResponse.json({
-      answer: answer || "I couldn't generate a response based on the available information.",
-      citations: formattedCitations,
-    });
-
-  } catch (error: unknown) {
+  } catch (error) {
+    console.error('Error in chat API:', error);
+    
     if (error instanceof Error) {
-      console.error('Error in chat handler:', error);
-      return NextResponse.json({ 
-        message: error.message || 'Chat processing failed.' 
-      }, { status: 500 });
-    } else {
-      console.error('Unknown error in chat handler:', error);
-      return NextResponse.json({ message: 'Chat processing failed.' }, { status: 500 });
+      return new Response(
+        JSON.stringify({ error: error.message }), 
+        { 
+          status: 500,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
     }
+    
+    return new Response(
+      JSON.stringify({ error: 'An unknown error occurred' }), 
+      { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      }
+    );
   }
 }
