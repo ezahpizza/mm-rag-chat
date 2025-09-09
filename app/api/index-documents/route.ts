@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { google } from '@ai-sdk/google';
-import { embed } from 'ai';
+import { embed, EmbeddingModel } from 'ai';
 import {
   parseFormData,
   parsePdfWithFallback,
@@ -30,7 +30,7 @@ async function embedDocs(docs: Doc[]): Promise<number[][]> {
       const batch = docs.slice(i, i + batchSize);
       const batchPromises = batch.map(async (doc) => {
         const { embedding } = await embed({
-          model: google.textEmbeddingModel('text-embedding-004') as any,
+          model: google.textEmbeddingModel('text-embedding-004'),
           value: doc.text,
         });
         return embedding;

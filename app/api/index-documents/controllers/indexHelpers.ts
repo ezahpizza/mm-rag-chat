@@ -173,7 +173,7 @@ Be concise but comprehensive. Do not speculate or add information not visible in
 
 // Lint: ignore unused error variable
 // 'overlap' is currently unused but kept for API compatibility
-export function chunkText(text: string, maxChunkSize: number = 1000, _overlap: number = 200) {
+export function chunkText(text: string, maxChunkSize: number = 1000) {
   const chunks = [];
   const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
   let currentChunk = '';

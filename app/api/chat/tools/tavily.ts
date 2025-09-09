@@ -76,7 +76,7 @@ export const createTavilyTool = () => {
       }
       
       formattedResults += "Sources:\n";
-      data.results.slice(0, maxResults).forEach((result: any, index: number) => {
+      data.results.slice(0, maxResults).forEach((result: TavilyResult, index: number) => {
         const title = result.title || 'Untitled';
         const url = result.url || 'No URL';
         const content = (result.content || result.snippet || 'No content available').substring(0, 500); // Limit content length

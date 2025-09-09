@@ -57,7 +57,6 @@ export default function ChatMessages({
             // Filter out empty assistant messages and messages with only tool calls
             if (message.role === 'assistant') {
               const hasContent = message.content && message.content.trim().length > 0;
-              const hasToolCalls = message.toolInvocations && message.toolInvocations.length > 0;
 
               // Only show assistant messages that have actual content
               // Tool calls without content should be filtered out
