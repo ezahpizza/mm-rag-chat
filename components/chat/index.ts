@@ -1,4 +1,3 @@
-export { default as FileUploadSection } from './FileUploadSection';
 export { default as ChatMessages } from './ChatMessages';
 export { default as ChatInput } from './ChatInput';
 export { default as LoadingIndicator } from './LoadingIndicator';

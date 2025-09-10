@@ -6,15 +6,15 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Multimodal RAG Chatbot',
-  description: 'A demo of a multimodal RAG chatbot with Gemini, Pinecone, Tavily, and LlamaParse.',
+  title: 'Legal Document Assistant',
+  description: 'AI-powered legal document simplification with RAG and web search capabilities.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={cn(inter.className, 'min-h-screen')} suppressHydrationWarning={true}> 
-        <div className="min-h-screen flex flex-col">{children}</div>
+        {children}
       </body>
     </html>
   );

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useChat, type Message } from 'ai/react';
 import { motion } from 'framer-motion';
 import {
-  FileUploadSection,
   ChatMessages,
   ChatInput,
   LoadingIndicator,
@@ -53,39 +52,33 @@ export default function ChatPage() {
   // Use the custom hook for WebSocket and recording
   const { currentTranscript, isRecording, handleMicClick } = useWebSocketAndRecording();
 
+  const isNoMessages = messages.length === 0 && !isRecording;
+
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#18181b] to-[#23272f] px-2 dark">
-      <motion.div
-        className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mt-10 transition-all"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.22, ease: [0.4, 0.0, 0.2, 1] }}
-        style={{ willChange: 'opacity, transform', overflow: 'visible' }}
-      >
-        <h2 className="text-3xl font-bold mb-4 text-center text-gray-100 tracking-tight">
-          Legal Document Assistant
-        </h2>
+    <div className="bg-eriBlack min-h-screen">
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4">
+        <div className="min-h-screen flex flex-col">
 
-        <p className="text-center text-gray-400 mb-6 text-sm">
-          Upload legal documents and ask questions. I can analyze your documents and search for relevant legal information.
-        </p>
+          {/* Welcome Message */}
+          {isNoMessages && (
+            <div className="flex-1 flex items-center justify-center text-razza">
+              <h1 className="text-center tracking-tighter text-5xl">
+                Welcome back <span className="animate-pulse">🦜</span>
+              </h1>
+            </div>
+          )}
 
-        {/* File Upload Section */}
-        <FileUploadSection
-          uploading={uploading}
-          setUploading={setUploading}
-          indexStatus={indexStatus}
-          setIndexStatus={setIndexStatus}
-        />
-
-        {/* Chat Interface */}
-        <div className="relative h-[480px] bg-[#18181b]/95 rounded-2xl shadow-2xl border border-sidebar-border flex flex-col overflow-hidden">
           {/* Chat Messages */}
-          <ChatMessages
-            messages={messages}
-            isRecording={isRecording}
-            currentTranscript={currentTranscript}
-          />
+          {messages.length > 0 && (
+            <div className="flex-1 overflow-y-auto px-4 py-6 pb-32">
+              <ChatMessages
+                messages={messages}
+                isRecording={isRecording}
+                currentTranscript={currentTranscript}
+              />
+            </div>
+          )}
 
           {/* Loading Indicator */}
           <LoadingIndicator isLoading={isLoading} messages={messages} />
@@ -94,16 +87,33 @@ export default function ChatPage() {
           <ErrorDisplay error={error || null} />
 
           {/* Chat Input */}
-          <ChatInput
-            input={input}
-            handleInputChange={handleInputChange}
-            handleSubmit={handleSubmit}
-            isLoading={isLoading}
-            isRecording={isRecording}
-            onMicClick={() => handleMicClick(append)}
-          />
+          <motion.div
+            className="fixed left-0 right-0 bg-eriBlack py-4"
+            initial={{ top: 'auto', bottom: '30%', transform: 'translateY(50%)' }}
+            animate={
+              isNoMessages
+                ? { top: 'auto', bottom: '30%', transform: 'translateY(50%)' }
+                : { top: 'auto', bottom: 0, transform: 'translateY(0)' }
+            }
+            transition={{ duration: 0.5 }}
+          >
+            <div className="max-w-3xl mx-auto px-4">
+              <ChatInput
+                input={input}
+                handleInputChange={handleInputChange}
+                handleSubmit={handleSubmit}
+                isLoading={isLoading}
+                isRecording={isRecording}
+                onMicClick={() => handleMicClick(append)}
+                uploading={uploading}
+                setUploading={setUploading}
+                indexStatus={indexStatus}
+                setIndexStatus={setIndexStatus}
+              />
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
-    </main>
+      </main>
+    </div>
   );
 }

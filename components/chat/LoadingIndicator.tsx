@@ -19,8 +19,8 @@ export default function LoadingIndicator({ isLoading, messages }: LoadingIndicat
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="bg-sidebar-primary/80 px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-3">
-        <Spinner size={20} className="text-sidebar-accent" />
+      <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md flex items-center gap-3 shadow-md">
+        <Spinner size={20} className="text-gray-500" />
         <div className="text-gray-400 text-sm">
           {/* Show different loading messages based on context */}
           {messages.length > 0 &&
