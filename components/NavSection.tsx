@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import {
-  FiBarChart,
   FiChevronDown,
   FiChevronsRight,
-  FiDollarSign,
   FiHome,
-  FiMonitor,
-  FiShoppingCart,
-  FiTag,
-  FiUsers,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface OptionProps {
   Icon: React.ComponentType;
@@ -35,13 +30,17 @@ interface SidebarProps {
   setIsOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-export const NavSection = () => {
+interface NavSectionProps {
+  children: React.ReactNode;
+}
+
+export const NavSection = ({ children }: NavSectionProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex bg-elec-purple min-h-screen">
+    <div className="flex bg-persian min-h-screen">
       <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
-      <Content />
+      <Content>{children}</Content>
     </div>
   );
 };
@@ -52,10 +51,11 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
   return (
     <motion.nav
       layout
-      className="sticky top-0 h-screen shrink-0 border-r border-gray-200 bg-mid-navy p-2"
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+      className="sticky top-0 h-screen shrink-0 bg-persian p-4"
       style={{
         width: isOpen ? "280px" : "fit-content",
-      }}
+      }} 
     >
       <TitleSection open={isOpen} />
 
@@ -75,14 +75,22 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
 };
 
 const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps) => {
+  const router = useRouter();
+
   return (
     <motion.button
       layout
-      onClick={() => setSelected(title)}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors ${
+      onClick={() => {
+        if (title === "Home") {
+          router.push("/");
+        } else {
+          setSelected(title);
+        }
+      }}
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-lavenda font-bold text-lg ${
         selected === title 
-          ? "bg-lavenda/20 text-lavenda" 
-          : "text-gray-300 hover:bg-elec-purple/10 hover:text-lavenda"
+          ? "bg-lavenda/20" 
+          : "hover:bg-cerulean"
       }`}
     >
       <motion.div
@@ -97,7 +105,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.125 }}
-          className="text-xs font-medium"
+          className="text-md font-medium"
         >
           {title}
         </motion.span>
@@ -112,7 +120,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
           }}
           style={{ y: "-50%" }}
           transition={{ delay: 0.5 }}
-          className="absolute right-2 top-1/2 size-4 rounded bg-hot-pink text-xs text-white flex items-center justify-center"
+          className="absolute right-2 top-1/2 size-4 rounded bg-razza text-md text-white flex items-center justify-center"
         >
           {notifs}
         </motion.span>
@@ -123,8 +131,8 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
 
 const TitleSection = ({ open }:TitleSectionProps) => {
   return (
-    <div className="mb-3 border-b border-gray-600 pb-3">
-      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors hover:bg-elec-purple/10">
+    <div className="mb-3 border-b-2 border-eriBlack pb-3">
+      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors hover:bg-cerulean">
         <div className="flex items-center gap-2">
           <Logo />
           {open && (
@@ -134,8 +142,7 @@ const TitleSection = ({ open }:TitleSectionProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.125 }}
             >
-              <span className="block text-xs font-semibold text-lavenda">LegalAssist</span>
-              <span className="block text-xs text-gray-400">AI Powered</span>
+              <span className="block text-2xl font-black text-lavenda">LegalAssist</span>
             </motion.div>
           )}
         </div>
@@ -149,7 +156,7 @@ const Logo = () => {
   return (
     <motion.div
       layout
-      className="grid size-10 shrink-0 place-content-center rounded-md bg-elec-purple"
+      className="grid size-10 shrink-0 place-content-center rounded-md bg-razza"
     >
       <svg
         width="24"
@@ -177,7 +184,7 @@ const ToggleClose = ({ open, setOpen }:ToggleCloseProps) => {
     <motion.button
       layout
       onClick={() => setOpen((pv) => !pv)}
-      className="absolute bottom-0 left-0 right-0 border-t border-gray-600 transition-colors hover:bg-elec-purple/10"
+      className="absolute bottom-0 left-0 right-0 border-t-2 border-cerulean transition-colors hover:bg-electric rounded-lg m-2  focus:outline-none"
     >
       <div className="flex items-center p-2">
         <motion.div
@@ -194,7 +201,7 @@ const ToggleClose = ({ open, setOpen }:ToggleCloseProps) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.125 }}
-            className="text-xs font-medium text-gray-300"
+            className="text-md font-medium text-gray-300"
           >
             Hide
           </motion.span>
@@ -204,4 +211,4 @@ const ToggleClose = ({ open, setOpen }:ToggleCloseProps) => {
   );
 };
 
-const Content = () => <div className="max-h-screen w-full"></div>;
+const Content = ({ children }: { children: React.ReactNode }) => <div className="flex-1 h-screen overflow-hidden">{children}</div>;

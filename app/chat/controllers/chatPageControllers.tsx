@@ -110,15 +110,15 @@ export function formatBotResponse(answer: string, citations: Citation[] = []) {
             p: ({ children }) => <p className="mb-2 leading-relaxed break-words">{children}</p>,
             strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
             em: ({ children }) => <em className="italic">{children}</em>,
-            code: ({ children }) => <code className="bg-gray-700 text-gray-200 px-1 py-0.5 rounded text-xs break-all">{children}</code>,
-            pre: ({ children }) => <pre className="bg-gray-800 p-2 rounded text-xs overflow-x-auto">{children}</pre>,
+            code: ({ children }) => <code className="bg-gray-700 text-gray-200 px-1 py-0.5 rounded text-md break-all">{children}</code>,
+            pre: ({ children }) => <pre className="bg-gray-800 p-2 rounded text-md overflow-x-auto">{children}</pre>,
           }}
         >
           {cleanAnswer}
         </ReactMarkdown>
       </div>
       {validCitations && validCitations.length > 0 && (
-        <div className="text-xs border-t border-gray-700 pt-2 mt-3 overflow-hidden">
+        <div className="text-md border-t border-gray-700 pt-2 mt-3 overflow-hidden">
           <div className="font-semibold text-gray-400 mb-2">Sources:</div>
           <div className="space-y-2">
             {validCitations.map((citation, index) => {
@@ -134,19 +134,19 @@ export function formatBotResponse(answer: string, citations: Citation[] = []) {
                           href={cleanSource}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-400 hover:text-blue-300 underline text-xs break-all block"
+                          className="text-blue-400 hover:text-blue-300 underline text-md break-all block"
                         >
                           {cleanSource}
                         </a>
                       ) : (
-                        <span className="text-gray-300 px-2 py-1 rounded text-xs font-mono break-all block">
+                        <span className="text-gray-300 px-2 py-1 rounded text-md font-mono break-all block">
                           {cleanSource}
                         </span>
                       )}
                     </div>
                   </div>
                   {cleanText && (
-                    <p className="text-gray-400 text-xs ml-6 leading-relaxed break-words overflow-hidden">
+                    <p className="text-gray-400 text-md ml-6 leading-relaxed break-words overflow-hidden">
                       {cleanText}
                     </p>
                   )}

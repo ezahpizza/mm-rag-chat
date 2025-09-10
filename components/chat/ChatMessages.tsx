@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { type Message } from 'ai/react';
 import ReactMarkdown from 'react-markdown';
 import { User, Bot } from 'lucide-react';
+import { Sen  } from 'next/font/google';
+
+const sen = Sen ({ weight: '400', subsets: ['latin'] });
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -68,7 +71,7 @@ export default function ChatMessages({
                   {/* User message display */}
                   <div className="flex justify-end">
                     <div className="flex items-end col-start-3 pb-1 mx-2 opacity-100 transform-none">
-                      <div className="rounded-xl px-3 py-2 break-words text-stone-900 transition-all bg-desire place-self-end">
+                      <div className={`${sen.className} rounded-xl px-3 py-2 break-words text-white transition-all bg-razza place-self-end`}>
                         <div className="contents">
                           <p className="whitespace-pre-wrap">{message.content}</p>
                         </div>
@@ -85,21 +88,20 @@ export default function ChatMessages({
               ) : (
                 <>
                   {/* Assistant message display */}
-                  <div className="flex justify-start my-2">
-                    <div
-                      className="font-bold rounded-full flex items-center justify-center mx-2 h-8 w-8 text-[14px] bg-white text-white mt-0.5"
-                    >
-                      <Bot size={18} />
+                  <div className="flex justify-start">
+                    <div className="flex items-start col-start-1 pb-1 mx-2 opacity-100 transform-none">
+                      {/* Bot avatar */}
+                      <div className="font-bold rounded-full flex items-center justify-center h-8 w-8 text-[14px] bg-razza text-white">
+                        <Bot size={18} />
+                      </div>
                     </div>
-                    <div className="col-start-2 grid gap-2 opacity-100 transform-none">
+                    <div className="flex items-end col-start-2 pb-1 mx-2 opacity-100 transform-none">
                       {/* Assistant message content */}
-                      <div
-                        className={`ReactMarkdown rounded-xl px-3 py-2 break-words text-stone-900 transition-all pb-1 grid gap-3 grid-cols-1 max-w-7xl bg-lavenda place-self-start`}
-                      >
+                      <div className="rounded-xl px-3 py-2 break-words text-stone-900 transition-all bg-lavenda place-self-start">
                         <div className="contents">
                           {/* Show tool usage indicator if there are tool invocations */}
                           {message.toolInvocations && message.toolInvocations.length > 0 && (
-                            <div className="text-xs text-gray-400 mb-2 italic">
+                            <div className="text-md text-gray-400 mb-2 italic">
                               🔍 Searching documents...
                             </div>
                           )}

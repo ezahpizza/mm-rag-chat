@@ -1,9 +1,9 @@
 import './globals.css';
 import { cn } from '../lib/utils';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Caudex } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+const caudex = Caudex ({ weight: '400', subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Legal Document Assistant',
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'min-h-screen')} suppressHydrationWarning={true}> 
-        {children}
+      <body className={cn(caudex.className, 'min-h-screen')} suppressHydrationWarning={true}> 
+          {children}
       </body>
     </html>
   );

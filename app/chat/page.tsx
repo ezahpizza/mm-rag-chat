@@ -10,6 +10,7 @@ import {
   ErrorDisplay,
   useWebSocketAndRecording,
 } from '../../components/chat';
+import { NavSection } from '../../components/NavSection';
 
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
@@ -55,49 +56,49 @@ export default function ChatPage() {
   const isNoMessages = messages.length === 0 && !isRecording;
 
   return (
-    <div className="bg-eriBlack min-h-screen">
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4">
-        <div className="min-h-screen flex flex-col">
+    <NavSection>
+      <div className="bg-persian h-screen overflow-hidden p-4">
+        {/* Main Content */}
+        <main className="w-full bg-eriBlack mx-auto rounded-2xl relative h-full flex flex-col items-center">
+          {/* Scrollable Content Area */}
+          <div className="flex-1 max-w-5xl overflow-y-auto scrollbar-hide p-4 pb-24">
+            {/* Welcome Message */}
+            {isNoMessages && (
+              <div className="h-full flex items-center justify-center text-razza">
+                <h1 className="font-bold text-5xl pl-20">
+                  Welcome back <span className="animate-pulse">🦜</span>
+                </h1>
+              </div>
+            )}
 
-          {/* Welcome Message */}
-          {isNoMessages && (
-            <div className="flex-1 flex items-center justify-center text-razza">
-              <h1 className="text-center tracking-tighter text-5xl">
-                Welcome back <span className="animate-pulse">🦜</span>
-              </h1>
-            </div>
-          )}
+            {/* Chat Messages */}
+            {messages.length > 0 && (
+              <div className="py-6">
+                <ChatMessages
+                  messages={messages}
+                  isRecording={isRecording}
+                  currentTranscript={currentTranscript}
+                />
+              </div>
+            )}
 
-          {/* Chat Messages */}
-          {messages.length > 0 && (
-            <div className="flex-1 overflow-y-auto px-4 py-6 pb-32">
-              <ChatMessages
-                messages={messages}
-                isRecording={isRecording}
-                currentTranscript={currentTranscript}
-              />
-            </div>
-          )}
+            {/* Loading Indicator */}
+            <LoadingIndicator isLoading={isLoading} messages={messages} />
 
-          {/* Loading Indicator */}
-          <LoadingIndicator isLoading={isLoading} messages={messages} />
+            {/* Error Display */}
+            <ErrorDisplay error={error || null} />
+          </div>
 
-          {/* Error Display */}
-          <ErrorDisplay error={error || null} />
-
-          {/* Chat Input */}
+          {/* Chat Input - Fixed Overlay */}
           <motion.div
-            className="fixed left-0 right-0 bg-eriBlack py-4"
-            initial={{ top: 'auto', bottom: '30%', transform: 'translateY(50%)' }}
-            animate={
-              isNoMessages
-                ? { top: 'auto', bottom: '30%', transform: 'translateY(50%)' }
-                : { top: 'auto', bottom: 0, transform: 'translateY(0)' }
-            }
-            transition={{ duration: 0.5 }}
+            className="absolute bottom-4 left-16 right-4 z-10"
+            initial={{ y: isNoMessages ? '-25vh' : 0 }}
+            animate={{
+              y: isNoMessages ? '-25vh' : 0
+            }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <div className="max-w-3xl mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
               <ChatInput
                 input={input}
                 handleInputChange={handleInputChange}
@@ -112,8 +113,8 @@ export default function ChatPage() {
               />
             </div>
           </motion.div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </NavSection>
   );
 }
