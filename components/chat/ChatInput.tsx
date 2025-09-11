@@ -3,8 +3,9 @@
 import React, { useRef, useState } from 'react';
 import { Button } from '../ui';
 import { Spinner } from '../spinner';
-import { Mic, Paperclip, Send, XCircle } from 'lucide-react';
+import { Mic, Paperclip, Send, XCircle, Settings, FileText, List, HelpCircle } from 'lucide-react';
 import { handleUpload } from '../../app/chat/controllers/chatPageControllers';
+import { StaggeredDrop } from '../staggeredDrop';
 
 interface ChatInputProps {
   input: string;
@@ -17,6 +18,8 @@ interface ChatInputProps {
   setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   indexStatus: string | null;
   setIndexStatus: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedMode: string;
+  setSelectedMode: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function ChatInput({
@@ -29,9 +32,28 @@ export default function ChatInput({
   uploading,
   setUploading,
   setIndexStatus,
+  setSelectedMode,
 }: ChatInputProps) {
   const [files, setFiles] = useState<File[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const modeOptions = [
+    {
+      text: 'Plain English',
+      Icon: FileText,
+      onClick: () => setSelectedMode('Plain English'),
+    },
+    {
+      text: 'Bullet-point business summary',
+      Icon: List,
+      onClick: () => setSelectedMode('Bullet-point business summary'),
+    },
+    {
+      text: 'ELI5',
+      Icon: HelpCircle,
+      onClick: () => setSelectedMode('ELI5'),
+    },
+  ];
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     handleInputChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
@@ -104,6 +126,12 @@ export default function ChatInput({
           setIndexStatus={setIndexStatus}
           setFiles={setFiles}
         />
+        <StaggeredDrop
+          buttonText=""
+          buttonIcon={Settings}
+          options={modeOptions}
+          buttonClassName='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
+        />
         <Button
           type="button"
           onClick={onMicClick}
@@ -117,7 +145,7 @@ export default function ChatInput({
           type="submit"
           onClick={handleSubmit}
           disabled={isLoading || !input.trim() || isRecording}
-          className='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
+          className='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9 focus:outline-none'
         >
           <div className="grid place-items-center w-5 h-5">
             <Send size={18} />
@@ -165,7 +193,7 @@ function UploadButton({
     <Button
       type="button"
       onClick={onClick}
-      className='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
+      className='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9 focus:outline-none'
     >
       <input
         ref={fileInputRef}

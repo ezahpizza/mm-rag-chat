@@ -35,7 +35,7 @@ interface NavSectionProps {
 }
 
 export const NavSection = ({ children }: NavSectionProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex bg-persian min-h-screen">

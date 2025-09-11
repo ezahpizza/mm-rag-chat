@@ -15,6 +15,7 @@ import { NavSection } from '../../components/NavSection';
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
   const [indexStatus, setIndexStatus] = useState<string | null>(null);
+  const [selectedMode, setSelectedMode] = useState('Plain English');
 
   // Use AI SDK's useChat hook
   const {
@@ -27,6 +28,7 @@ export default function ChatPage() {
     append,
   } = useChat({
     api: '/api/chat',
+    body: { mode: selectedMode },
     fetch: async (url, options) => {
       console.log('Fetch called with:', url, options);
       const response = await fetch(url, options);
@@ -110,6 +112,8 @@ export default function ChatPage() {
                 setUploading={setUploading}
                 indexStatus={indexStatus}
                 setIndexStatus={setIndexStatus}
+                selectedMode={selectedMode}
+                setSelectedMode={setSelectedMode}
               />
             </div>
           </motion.div>
