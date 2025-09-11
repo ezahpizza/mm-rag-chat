@@ -5,7 +5,7 @@ import { Button } from '../ui';
 import { Spinner } from '../spinner';
 import { Mic, Paperclip, Send, XCircle, Settings, FileText, List, HelpCircle } from 'lucide-react';
 import { handleUpload } from '../../app/chat/controllers/chatPageControllers';
-import { StaggeredDrop } from '../staggeredDrop';
+import { StaggeredDrop } from './staggeredDrop';
 
 interface ChatInputProps {
   input: string;
@@ -32,6 +32,7 @@ export default function ChatInput({
   uploading,
   setUploading,
   setIndexStatus,
+  selectedMode,
   setSelectedMode,
 }: ChatInputProps) {
   const [files, setFiles] = useState<File[]>([]);
@@ -130,6 +131,7 @@ export default function ChatInput({
           buttonText=""
           buttonIcon={Settings}
           options={modeOptions}
+          selectedValue={selectedMode}
           buttonClassName='flex items-center bg-lavenda hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
         />
         <Button

@@ -1,32 +1,32 @@
 import { Hero } from "@/components/home/Hero";
 import { CardNav } from "@/components/global/CardNav";
-
-
-const items = [
-  {
-      label: "Explore", 
-      bgColor: "#170D27",
-      textColor: "#fff",
-      links: [
-        { label: "Lexi", href: "/chat", ariaLabel: "Chatbot" },
-        { label: "Case Studies", href: "#", ariaLabel: "Project Case Studies" }
-      ]
-    },
-    {
-      label: "About",
-      bgColor: "#0D0716",
-      textColor: "#fff",
-      links: [
-        { label: "Company", href: "#", ariaLabel: "About Company" },
-        { label: "Careers", href: "#", ariaLabel: "About Careers" }
-      ]
-    }
-  ];
-
+import Pixels from "@/components/home/Pixels";
+import { items } from "@/constants/home-items";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-eriBlack">
+      <div className="h-screen overflow-hidden bg-eriBlack"
+      style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <Pixels
+        variant="circle"
+        pixelSize={6}
+        color="#8b67ff"
+        patternScale={3}
+        patternDensity={1.6}
+        pixelSizeJitter={0.5}
+        enableRipples
+        rippleSpeed={0.4}
+        rippleThickness={0.12}
+        rippleIntensityScale={1.5}
+        liquid
+        liquidStrength={0.12}
+        liquidRadius={1.2}
+        liquidWobbleSpeed={5}
+        speed={0.6}
+        edgeFade={0.25}
+        transparent
+      />
       <CardNav
       logo="/logo.svg"
       logoAlt="Company Logo"
@@ -39,6 +39,8 @@ export default function HomePage() {
     />
 
       <Hero />
+    </div>
+      
     </main>
   );
 }

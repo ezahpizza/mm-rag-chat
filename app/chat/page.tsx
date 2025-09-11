@@ -8,9 +8,9 @@ import {
   ChatInput,
   LoadingIndicator,
   ErrorDisplay,
-  useWebSocketAndRecording,
+  useWebSocketAndRecording, PixelBlast
 } from '../../components/chat';
-import { NavSection } from '../../components/NavSection';
+import { NavSection } from '../../components/global/NavSection';
 
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
@@ -62,8 +62,30 @@ export default function ChatPage() {
       <div className="bg-persian h-screen overflow-hidden p-4">
         {/* Main Content */}
         <main className="w-full bg-eriBlack mx-auto rounded-2xl relative h-full flex flex-col items-center">
+
+          <div className="absolute inset-0 z-0">
+            <PixelBlast
+        variant="circle"
+        pixelSize={6}
+        color="#8b67ff"
+        patternScale={3}
+        patternDensity={1.6}
+        pixelSizeJitter={0.5}
+        enableRipples
+        rippleSpeed={0.4}
+        rippleThickness={0.12}
+        rippleIntensityScale={1.5}
+        liquid
+        liquidStrength={0.12}
+        liquidRadius={1.2}
+        liquidWobbleSpeed={5}
+        speed={0.6}
+        edgeFade={0.25}
+        transparent
+      />
+          </div>
           {/* Scrollable Content Area */}
-          <div className="flex-1 max-w-5xl overflow-y-auto scrollbar-hide p-4 pb-24">
+          <div className="flex-1 max-w-5xl overflow-y-auto scrollbar-hide p-4 pb-24 relative z-10">
             {/* Welcome Message */}
             {isNoMessages && (
               <div className="h-full flex items-center justify-center text-razza">
@@ -93,7 +115,7 @@ export default function ChatPage() {
 
           {/* Chat Input - Fixed Overlay */}
           <motion.div
-            className="absolute bottom-4 left-16 right-4 z-10"
+            className="absolute bottom-4 left-16 right-4 z-50"
             initial={{ y: isNoMessages ? '-25vh' : 0 }}
             animate={{
               y: isNoMessages ? '-25vh' : 0

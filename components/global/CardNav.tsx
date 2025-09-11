@@ -5,6 +5,7 @@ import { gsap } from 'gsap';
 import Link from 'next/link';
 // use your own icon import if react-icons is not available
 import { GoArrowUpRight } from 'react-icons/go';
+import { SignedIn, SignedOut, UserButton, SignUpButton } from '@clerk/nextjs';
 
 type CardNavLink = {
   label: string;
@@ -164,8 +165,7 @@ export const CardNav = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
-        style={{ backgroundColor: baseColor }}
+        className={`card-nav ${isExpanded ? 'open' : ''} bg-lilac block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
@@ -192,13 +192,19 @@ export const CardNav = ({
             <img src={logo} alt={logoAlt} className="logo h-[28px]" />
           </div>
 
-          <button
-            type="button"
-            className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full font-medium cursor-pointer transition-colors duration-300 items-center justify-center"
-            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
-          >
-            Get Started
-          </button>
+          <SignedOut>
+            <SignUpButton mode="modal">
+              <button
+                type="button"
+                className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full bg-eriBlack hover:bg-razza text-razza hover:text-eriBlack font-medium cursor-pointer transition-colors duration-300 items-center justify-center"
+              >
+                Get Started
+              </button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
 
         <div
