@@ -31,10 +31,7 @@ export default function HomePage() {
       logo="/logo.svg"
       logoAlt="Company Logo"
       items={items}
-      baseColor="#fff"
       menuColor="#000"
-      buttonBgColor="#111"
-      buttonTextColor="#fff"
       ease="power3.out"
     />
 

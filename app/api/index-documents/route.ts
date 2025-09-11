@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { google } from '@ai-sdk/google';
-import { embed, EmbeddingModel } from 'ai';
+import { embed } from 'ai';
 import {
   parseFormData,
   parsePdfWithFallback,

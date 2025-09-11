@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Link from 'next/link';
+import Image from 'next/image';
 // use your own icon import if react-icons is not available
 import { GoArrowUpRight } from 'react-icons/go';
 import { SignedIn, SignedOut, UserButton, SignUpButton } from '@clerk/nextjs';
@@ -26,10 +27,7 @@ export interface CardNavProps {
   items: CardNavItem[];
   className?: string;
   ease?: string;
-  baseColor?: string;
   menuColor?: string;
-  buttonBgColor?: string;
-  buttonTextColor?: string;
 }
 
 export const CardNav = ({
@@ -38,10 +36,7 @@ export const CardNav = ({
   items,
   className = '',
   ease = 'power3.out',
-  baseColor = '#fff',
-  menuColor,
-  buttonBgColor,
-  buttonTextColor
+  menuColor
 }:CardNavProps) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -67,7 +62,7 @@ export const CardNav = ({
         contentEl.style.position = 'static';
         contentEl.style.height = 'auto';
 
-        contentEl.offsetHeight;
+        void contentEl.offsetHeight;
 
         const topBar = 60;
         const padding = 16;
@@ -84,7 +79,7 @@ export const CardNav = ({
     return 260;
   };
 
-  const createTimeline = () => {
+  const createTimeline = useCallback(() => {
     const navEl = navRef.current;
     if (!navEl) return null;
 
@@ -102,7 +97,7 @@ export const CardNav = ({
     tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
 
     return tl;
-  };
+  }, [ease, items]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useLayoutEffect(() => {
     const tl = createTimeline();
@@ -112,7 +107,7 @@ export const CardNav = ({
       tl?.kill();
       tlRef.current = null;
     };
-  }, [ease, items]);
+  }, [createTimeline]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -139,7 +134,7 @@ export const CardNav = ({
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isExpanded]);
+  }, [isExpanded, createTimeline]);
 
   const toggleMenu = () => {
     const tl = tlRef.current;
@@ -189,7 +184,7 @@ export const CardNav = ({
           </div>
 
           <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
-            <img src={logo} alt={logoAlt} className="logo h-[28px]" />
+            <Image src={logo} alt={logoAlt} className="logo h-[28px]" width={28} height={28} />
           </div>
 
           <SignedOut>
