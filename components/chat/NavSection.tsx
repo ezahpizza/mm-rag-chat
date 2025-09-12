@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
-  FiChevronDown,
   FiChevronsRight,
   FiHome,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import MenuDrop from "./MenuDrop";
 
 interface OptionProps {
   Icon: React.ComponentType;
@@ -62,7 +62,7 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
       <div className="space-y-1">
         <Option
           Icon={FiHome}
-          title="Home"
+          title="demo"
           selected={selected}
           setSelected={setSelected}
           open={isOpen}
@@ -132,21 +132,13 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
 const TitleSection = ({ open }:TitleSectionProps) => {
   return (
     <div className="mb-3 border-b-2 border-eriBlack pb-3">
-      <div className="flex cursor-pointer items-center justify-between rounded-md transition-colors hover:bg-cerulean">
+      <div className="flex cursor-pointer items-center justify-between">
         <div className="flex items-center gap-2">
           <Logo />
           {open && (
-            <motion.div
-              layout
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.125 }}
-            >
-              <span className="block text-2xl font-black text-lavenda">LegalAssist</span>
-            </motion.div>
+              <MenuDrop />
           )}
         </div>
-        {open && <FiChevronDown className="mr-2 text-gray-400" />}
       </div>
     </div>
   );

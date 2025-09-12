@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "../ui";
 import { Check } from "lucide-react";
+import { wrapperVariants, itemVariants, actionIconVariants } from "./dropVariants";
 
 interface DropdownOption {
   text: string;
@@ -9,20 +10,19 @@ interface DropdownOption {
   onClick: () => void;
 }
 
-interface StaggeredDropProps {
-  buttonText: string;
+interface ModeProps {
   buttonIcon: React.ComponentType<{ size?: number }>;
   options: DropdownOption[];
   buttonClassName?: string;
   selectedValue?: string;
 }
 
-export const StaggeredDrop = ({
+export const ModeDrop = ({
   buttonIcon: ButtonIcon,
   options,
   buttonClassName = "flex items-center gap-2 px-3 py-2 rounded-md transition-colors ",
   selectedValue,
-}: StaggeredDropProps) => {
+}: ModeProps) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -110,41 +110,3 @@ const Option = ({ text, Icon, onClick, selected }: { text: string; Icon: React.C
   );
 };
 
-const wrapperVariants = {
-  open: {
-    scaleY: 1,
-    transition: {
-      when: "beforeChildren",
-      staggerChildren: 0.1,
-    },
-  },
-  closed: {
-    scaleY: 0,
-    transition: {
-      when: "afterChildren",
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      when: "beforeChildren",
-    },
-  },
-  closed: {
-    opacity: 0,
-    y: -15,
-    transition: {
-      when: "afterChildren",
-    },
-  },
-};
-
-const actionIconVariants = {
-  open: { scale: 1, y: 0 },
-  closed: { scale: 0, y: -7 },
-};

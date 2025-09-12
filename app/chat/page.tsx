@@ -10,7 +10,7 @@ import {
   ErrorDisplay,
   useWebSocketAndRecording, PixelBlast
 } from '../../components/chat';
-import { NavSection } from '../../components/global/NavSection';
+import { NavSection } from '../../components/chat/NavSection';
 
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
