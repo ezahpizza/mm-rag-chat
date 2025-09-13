@@ -9,8 +9,8 @@ import {
   LoadingIndicator,
   ErrorDisplay,
   useWebSocketAndRecording, PixelBlast
-} from '../../components/chat';
-import { NavSection } from '../../components/chat/NavSection';
+} from '@/components/chat';
+import { NavSection } from '@/components/chat/NavSection';
 
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
@@ -61,7 +61,7 @@ export default function ChatPage() {
     <NavSection>
       <div className="bg-persian h-screen overflow-hidden p-4">
         {/* Main Content */}
-        <main className="w-full bg-eriBlack mx-auto rounded-2xl relative h-full flex flex-col items-center">
+        <main className="w-full bg-obsidian mx-auto rounded-2xl relative h-full flex flex-col items-center">
 
           <div className="absolute inset-0 z-0">
             <PixelBlast

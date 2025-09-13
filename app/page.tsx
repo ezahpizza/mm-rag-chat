@@ -5,8 +5,8 @@ import { items } from "@/constants/home-items";
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-eriBlack">
-      <div className="h-screen overflow-hidden bg-eriBlack"
+    <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-obsidian">
+      <div className="h-screen overflow-hidden bg-obsidian"
       style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Pixels
         variant="circle"

@@ -87,10 +87,10 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
           setSelected(title);
         }
       }}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-lavenda font-bold text-lg ${
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-pearl font-bold text-lg ${
         selected === title 
-          ? "bg-lavenda/20" 
-          : "hover:bg-cerulean"
+          ? "bg-pearl/20" 
+          : "hover:bg-electric"
       }`}
     >
       <motion.div
@@ -131,7 +131,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
 
 const TitleSection = ({ open }:TitleSectionProps) => {
   return (
-    <div className="mb-3 border-b-2 border-eriBlack pb-3">
+    <div className="mb-3 border-b-2 border-obsidian pb-3">
       <div className="flex cursor-pointer items-center justify-between">
         <div className="flex items-center gap-2">
           <Logo />

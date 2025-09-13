@@ -97,7 +97,7 @@ export default function ChatMessages({
                     </div>
                     <div className="flex items-end col-start-2 pb-1 mx-2 opacity-100 transform-none">
                       {/* Assistant message content */}
-                      <div className="rounded-xl px-3 py-2 break-words text-stone-900 transition-all bg-lavenda place-self-start">
+                      <div className="rounded-xl px-3 py-2 break-words text-stone-900 transition-all bg-pearl place-self-start">
                         <div className="contents">
                           {/* Show tool usage indicator if there are tool invocations */}
                           {message.toolInvocations && message.toolInvocations.length > 0 && (

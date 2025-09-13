@@ -328,7 +328,7 @@ void main(){
 
 const MAX_CLICKS = 10;
 
-const Pixels: React.FC<PixelsProps> = ({
+const Pixels = ({
   variant = 'square',
   pixelSize = 3,
   color = '#B19EEF',
@@ -351,7 +351,7 @@ const Pixels: React.FC<PixelsProps> = ({
   transparent = true,
   edgeFade = 0.5,
   noiseAmount = 0
-}) => {
+}:PixelsProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);

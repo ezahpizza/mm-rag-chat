@@ -94,7 +94,7 @@ const Option = ({ text, Icon, onClick, selected }: { text: string; Icon: React.C
       className={`flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md transition-colors cursor-pointer ${
         selected
           ? 'bg-cerulean text-white'
-          : 'hover:bg-indigo-100 text-eriBlack hover:text-cerulean'
+          : 'hover:bg-indigo-100 text-obsidian hover:text-cerulean'
       }`}
     >
       <motion.span variants={actionIconVariants}>

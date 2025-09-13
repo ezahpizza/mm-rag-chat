@@ -328,7 +328,7 @@ void main(){
 
 const MAX_CLICKS = 10;
 
-const PixelBlast: React.FC<PixelBlastProps> = ({
+const PixelBlast = ({
   variant = 'square',
   pixelSize = 3,
   color = '#B19EEF',
@@ -351,7 +351,7 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
   transparent = true,
   edgeFade = 0.5,
   noiseAmount = 0
-}) => {
+}:PixelBlastProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const visibilityRef = useRef({ visible: true });
   const speedRef = useRef(speed);

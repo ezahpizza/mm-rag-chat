@@ -7,28 +7,8 @@ import Image from 'next/image';
 // use your own icon import if react-icons is not available
 import { GoArrowUpRight } from 'react-icons/go';
 import { SignedIn, SignedOut, UserButton, SignUpButton } from '@clerk/nextjs';
+import { CardNavProps } from './types';
 
-type CardNavLink = {
-  label: string;
-  href: string;
-  ariaLabel: string;
-};
-
-export type CardNavItem = {
-  label: string;
-  bgColor: string;
-  textColor: string;
-  links: CardNavLink[];
-};
-
-export interface CardNavProps {
-  logo: string;
-  logoAlt?: string;
-  items: CardNavItem[];
-  className?: string;
-  ease?: string;
-  menuColor?: string;
-}
 
 export const CardNav = ({
   logo,
@@ -40,9 +20,9 @@ export const CardNav = ({
 }:CardNavProps) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const navRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const navRef = useRef<HTMLDivElement | null>(null);
 
   const calculateHeight = () => {
     const navEl = navRef.current;
@@ -50,8 +30,8 @@ export const CardNav = ({
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     if (isMobile) {
-      const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
-      if (contentEl) {
+        const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;
+        if (contentEl) {
         const wasVisible = contentEl.style.visibility;
         const wasPointerEvents = contentEl.style.pointerEvents;
         const wasPosition = contentEl.style.position;
@@ -74,10 +54,11 @@ export const CardNav = ({
         contentEl.style.height = wasHeight;
 
         return topBar + contentHeight + padding;
-      }
+        }
     }
     return 260;
-  };
+};
+
 
   const createTimeline = useCallback(() => {
     const navEl = navRef.current;
@@ -160,7 +141,7 @@ export const CardNav = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} bg-lilac block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
+        className={`card-nav ${isExpanded ? 'open' : ''} bg-ocean block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
@@ -191,7 +172,7 @@ export const CardNav = ({
             <SignUpButton mode="modal">
               <button
                 type="button"
-                className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full bg-eriBlack hover:bg-razza text-razza hover:text-eriBlack font-medium cursor-pointer transition-colors duration-300 items-center justify-center"
+                className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full bg-obsidian hover:bg-razza text-razza hover:text-obsidian font-medium cursor-pointer transition-colors duration-300 items-center justify-center"
               >
                 Get Started
               </button>

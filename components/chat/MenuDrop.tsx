@@ -35,7 +35,7 @@ const MenuDrop = () => {
           initial={wrapperVariants.closed}
           variants={wrapperVariants}
           style={{ originY: "top", translateX: "-50%" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-lavenda shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden z-50"
+          className="flex flex-col gap-2 p-2 rounded-lg bg-pearl shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden z-50"
         >
           <Option setOpen={setOpen} Icon={FiHome} text="Home" />
           <Option setOpen={setOpen} Icon={MdCompare} text="Compare" />
@@ -61,7 +61,7 @@ const Option = ({ text, Icon, setOpen }: MenuProps) => {
         const route = text.toLowerCase() === 'home' ? '/' : `/${text.toLowerCase()}`;
         router.push(route);
       }}
-      className="flex items-center gap-2 w-full p-2 text-md font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 hover:text-indigo-500 transition-colors cursor-pointer"
+      className="flex items-center gap-2 w-full p-2 text-md font-medium whitespace-nowrap rounded-md hover:bg-electric text-cerulean hover:text-pearl transition-colors cursor-pointer"
     >
       <motion.button variants={actionIconVariants}>
         <Icon />
