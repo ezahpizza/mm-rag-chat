@@ -188,6 +188,9 @@ export interface ActionButtonsProps {
   onCompare: () => void;
   onReset: () => void;
   onClearResults: () => void;
+  onExportPDF?: () => void;
+  isExporting?: boolean;
+  docNames?: string[];
 }
 
 export interface ErrorDisplayProps {

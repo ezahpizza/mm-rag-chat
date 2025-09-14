@@ -75,7 +75,7 @@ export default function ChatInput({
         >
           <textarea
             ref={textareaRef}
-            className="p-1.5 resize-none focus:outline-none w-full h-auto text-xl text-obsidian placeholder:text-obsidian placeholder:text-xl"
+            className="p-1.5 resize-none focus:outline-none w-full h-auto text-md text-obsidian placeholder:text-obsidian placeholder:text-md"
             value={input}
             placeholder="How can I help you today?"
             onChange={handleTextareaChange}

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import {
   FiChevronsRight,
-  FiHome,
+  FiSave,
+  FiDownload,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import MenuDrop from "./MenuDrop";
+import { Message } from 'ai/react';
+import { handleSummarizeAndSave, handleSummarizeAndExport } from '@/lib/summary/chatSummaryUtils';
 
 interface OptionProps {
   Icon: React.ComponentType;
@@ -14,6 +17,9 @@ interface OptionProps {
   setSelected: (title: string) => void;
   open: boolean;
   notifs?: number;
+  onClick?: () => void;
+  disabled?: boolean;
+  isLoading?: boolean;
 }
 
 interface TitleSectionProps {
@@ -28,25 +34,75 @@ interface ToggleCloseProps {
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
+  messages: Message[];
 }
 
 interface NavSectionProps {
   children: React.ReactNode;
+  messages?: Message[];
 }
 
-export const NavSection = ({ children }: NavSectionProps) => {
+export const NavSection = ({ children, messages = [] }: NavSectionProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex bg-persian min-h-screen">
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} messages={messages} />
       <Content>{children}</Content>
     </div>
   );
 };
 
-const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
+const Sidebar = ({ isOpen, setIsOpen, messages }:SidebarProps) => {
   const [selected, setSelected] = useState("Dashboard");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingType, setProcessingType] = useState<'save' | 'export' | null>(null);
+
+  const hasMessages = messages && messages.length > 0;
+
+  const handleSummarizeAndSaveClick = async () => {
+    if (!hasMessages || isProcessing) return;
+    
+    setIsProcessing(true);
+    setProcessingType('save');
+    
+    try {
+      const result = await handleSummarizeAndSave(messages);
+      if (result.success) {
+        console.log('✅ Summary saved successfully:', result.chatId);
+        // You could show a toast notification here
+      } else {
+        console.error('❌ Failed to save summary:', result.message);
+      }
+    } catch (error) {
+      console.error('❌ Error during summarize and save:', error);
+    } finally {
+      setIsProcessing(false);
+      setProcessingType(null);
+    }
+  };
+
+  const handleSummarizeAndExportClick = async () => {
+    if (!hasMessages || isProcessing) return;
+    
+    setIsProcessing(true);
+    setProcessingType('export');
+    
+    try {
+      const result = await handleSummarizeAndExport(messages);
+      if (result.success) {
+        console.log('✅ Summary saved and exported successfully:', result.chatId);
+        // You could show a toast notification here
+      } else {
+        console.error('❌ Failed to save and export summary:', result.message);
+      }
+    } catch (error) {
+      console.error('❌ Error during summarize and export:', error);
+    } finally {
+      setIsProcessing(false);
+      setProcessingType(null);
+    }
+  };
 
   return (
     <motion.nav
@@ -61,11 +117,24 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
 
       <div className="space-y-1">
         <Option
-          Icon={FiHome}
-          title="demo"
+          Icon={FiSave}
+          title="Summarise & Save"
           selected={selected}
           setSelected={setSelected}
           open={isOpen}
+          onClick={handleSummarizeAndSaveClick}
+          disabled={!hasMessages || isProcessing}
+          isLoading={isProcessing && processingType === 'save'}
+        />
+        <Option
+          Icon={FiDownload}
+          title="Summarise & Export"
+          selected={selected}
+          setSelected={setSelected}
+          open={isOpen}
+          onClick={handleSummarizeAndExportClick}
+          disabled={!hasMessages || isProcessing}
+          isLoading={isProcessing && processingType === 'export'}
         />
       </div>
 
@@ -74,30 +143,47 @@ const Sidebar = ({ isOpen, setIsOpen }:SidebarProps) => {
   );
 };
 
-const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps) => {
+const Option = ({ Icon, title, selected, setSelected, open, notifs, onClick, disabled = false, isLoading = false }:OptionProps) => {
   const router = useRouter();
+
+  const handleClick = () => {
+    if (disabled) return;
+    
+    if (onClick) {
+      onClick();
+    } else if (title === "Home") {
+      router.push("/");
+    } else {
+      setSelected(title);
+    }
+  };
 
   return (
     <motion.button
       layout
-      onClick={() => {
-        if (title === "Home") {
-          router.push("/");
-        } else {
-          setSelected(title);
-        }
-      }}
-      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-pearl font-bold text-lg ${
-        selected === title 
-          ? "bg-pearl/20" 
-          : "hover:bg-electric"
+      onClick={handleClick}
+      disabled={disabled}
+      className={`relative flex h-10 w-full items-center rounded-md transition-colors text-pearl font-bold text-md ${
+        disabled 
+          ? "opacity-50 cursor-not-allowed bg-gray-600" 
+          : selected === title 
+            ? "bg-pearl/20" 
+            : "hover:bg-electric"
       }`}
     >
       <motion.div
         layout
         className="grid h-full w-10 place-content-center text-lg"
       >
-        <Icon />
+        {isLoading ? (
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            className="w-4 h-4 border-2 border-pearl border-t-transparent rounded-full"
+          />
+        ) : (
+          <Icon />
+        )}
       </motion.div>
       {open && (
         <motion.span
@@ -111,7 +197,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }:OptionProps
         </motion.span>
       )}
 
-      {notifs && open && (
+      {notifs && open && !isLoading && (
         <motion.span
           initial={{ scale: 0, opacity: 0 }}
           animate={{

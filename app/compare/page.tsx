@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { PDFPreview } from '@/components/compare';
 import { 
   useComparePageState,
@@ -26,8 +26,12 @@ import { DocumentUploadSection,
         ProgressDisplay, 
         HelpSection, 
         PageHeader } from './sections';
+import { exportComparisonReportToPDF } from '@/lib/pdf';
 
 export default function ComparePage() {
+  // Export state
+  const [isExporting, setIsExporting] = useState(false);
+
   // State management using custom hook
   const {
     docAFile,
@@ -81,6 +85,23 @@ export default function ComparePage() {
     setRiskFilter,
     setCategoryFilter
   );
+
+  // Export handler
+  const handleExportPDF = async () => {
+    if (!comparisonResult || !docAFile || !docBFile) return;
+    
+    setIsExporting(true);
+    try {
+      const docNames = [docAFile.name, docBFile.name];
+      exportComparisonReportToPDF(comparisonResult, docNames);
+      console.log('✅ PDF exported successfully');
+    } catch (error) {
+      console.error('❌ Error exporting PDF:', error);
+      setError('Failed to export PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   // Computed values
   const filteredComparisons = comparisonResult 
@@ -146,6 +167,9 @@ export default function ComparePage() {
         onCompare={handleCompareDocuments}
         onReset={resetAll}
         onClearResults={clearResults}
+        onExportPDF={handleExportPDF}
+        isExporting={isExporting}
+        docNames={docAFile && docBFile ? [docAFile.name, docBFile.name] : []}
       />
 
       {error && <ErrorDisplay error={error} />}

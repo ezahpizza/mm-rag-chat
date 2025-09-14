@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/button';
 import { ActionButtonsProps } from '@/components/compare/types';
+import { FiDownload } from 'react-icons/fi';
 
 export const ActionButtons = ({
   canCompare,
@@ -9,7 +10,9 @@ export const ActionButtons = ({
   hasResults,
   onCompare,
   onReset,
-  onClearResults
+  onClearResults,
+  onExportPDF,
+  isExporting = false
 }: ActionButtonsProps) => (
   <div className="flex gap-3 flex-wrap">
     <Button
@@ -26,6 +29,26 @@ export const ActionButtons = ({
         'Compare Documents'
       )}
     </Button>
+    
+    {hasResults && onExportPDF && (
+      <Button
+        onClick={onExportPDF}
+        disabled={isExporting}
+        className="bg-razza text-white hover:bg-razza/80 flex items-center gap-2"
+      >
+        {isExporting ? (
+          <>
+            <span>Exporting...</span>
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          </>
+        ) : (
+          <>
+            <FiDownload />
+            <span>Export PDF</span>
+          </>
+        )}
+      </Button>
+    )}
     
     {hasFiles && (
       <Button

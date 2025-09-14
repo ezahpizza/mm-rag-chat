@@ -3,6 +3,10 @@ export const runtime = 'nodejs';
 import { parseFormData } from '@/lib/formUtils';
 import { compareDocuments } from '@/lib/compareDocuments';
 import { ComparisonResponse } from '@/components/compare/types';
+import { auth } from '@clerk/nextjs/server';
+import { saveComparisonReport } from '@/lib/db/operations';
+import { validateComparisonResponse, validateDocNames, extractComparisonInsights } from '@/lib/summary/summaryHelpers';
+import { nanoid } from 'nanoid';
 
 function sanitizeResponse(resp: ComparisonResponse): { sanitized: ComparisonResponse; usedFallback: boolean } {
   return {
@@ -47,7 +51,58 @@ export async function POST(req: Request) {
     const comparison = await compareDocuments(fileA, fileB);
     const { sanitized } = sanitizeResponse(comparison as ComparisonResponse);
 
-    return NextResponse.json(sanitized);
+    // Validate comparison response
+    if (!validateComparisonResponse(sanitized)) {
+      console.warn('⚠️ Generated comparison response failed validation');
+      return NextResponse.json({
+        ...sanitized,
+        saved: false,
+        warning: 'Comparison generated but may have incomplete data'
+      });
+    }
+
+    // Auto-save comparison report to database if user is authenticated
+    try {
+      const { userId } = await auth();
+      if (userId) {
+        const reportId = nanoid(12);
+        const docNames = [fileA.name, fileB.name];
+        
+        // Validate document names
+        if (!validateDocNames(docNames)) {
+          throw new Error('Invalid document names for saving');
+        }
+        
+        await saveComparisonReport(userId, reportId, sanitized, docNames);
+        
+        // Extract insights for logging
+        const insights = extractComparisonInsights(sanitized);
+        console.log(`✅ Comparison report auto-saved for user ${userId} with reportId: ${reportId}`);
+        console.log(`📊 Report insights: ${insights.totalComparisons} comparisons, ${insights.overallRiskLevel} overall risk`);
+        
+        // Add the reportId and insights to the response
+        return NextResponse.json({
+          ...sanitized,
+          reportId,
+          saved: true,
+          insights
+        });
+      } else {
+        console.log('⚠️ User not authenticated, comparison report not saved');
+        return NextResponse.json({
+          ...sanitized,
+          saved: false
+        });
+      }
+    } catch (saveError) {
+      // Don't fail the entire request if saving fails
+      console.error('❌ Failed to auto-save comparison report:', saveError);
+      return NextResponse.json({
+        ...sanitized,
+        saved: false,
+        saveError: saveError instanceof Error ? saveError.message : 'Failed to save report to database'
+      });
+    }
 
   } catch (error: unknown) {
     console.error('Error in document comparison:', error);

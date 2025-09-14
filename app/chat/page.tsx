@@ -58,7 +58,7 @@ export default function ChatPage() {
   const isNoMessages = messages.length === 0 && !isRecording;
 
   return (
-    <NavSection>
+    <NavSection messages={messages}>
       <div className="bg-persian h-screen overflow-hidden p-4">
         {/* Main Content */}
         <main className="w-full bg-obsidian mx-auto rounded-2xl relative h-full flex flex-col items-center">

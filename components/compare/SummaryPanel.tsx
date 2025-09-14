@@ -146,23 +146,6 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
           </div>
         )}
 
-        {/* Export Options (Future Enhancement) */}
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="text-sm text-gray-600">
-              Need to share these results? Export options coming soon.
-            </div>
-            <div className="flex gap-2">
-              <button
-                disabled
-                className="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-md cursor-not-allowed"
-              >
-                Export PDF (Soon)
-              </button>
-              
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
