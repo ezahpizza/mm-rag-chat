@@ -2,8 +2,22 @@ import { NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 import { parseFormData } from '../index-documents/controllers/indexHelpers';
 import { compareDocuments } from '@/lib/compareDocuments';
+import { ComparisonResponse } from '@/components/compare/types';
 
-export const maxDuration = 60;
+function sanitizeResponse(resp: ComparisonResponse): { sanitized: ComparisonResponse; usedFallback: boolean } {
+  return {
+    sanitized: {
+      ...resp,
+      metadata: {
+        ...resp.metadata,
+        generated_at: new Date().toISOString()
+      }
+    },
+    usedFallback: false
+  };
+}
+
+export const maxDuration = 120;
 
 export async function POST(req: Request) {
   try {
@@ -28,10 +42,12 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log(`Starting direct Gemini comparison for: ${fileA.name} and ${fileB.name}`);
+    console.log(`Starting Gemini native PDF comparison for: ${fileA.name} and ${fileB.name}`);
 
     const comparison = await compareDocuments(fileA, fileB);
-    return NextResponse.json(comparison);
+    const { sanitized } = sanitizeResponse(comparison as ComparisonResponse);
+
+    return NextResponse.json(sanitized);
 
   } catch (error: unknown) {
     console.error('Error in document comparison:', error);
@@ -60,7 +76,6 @@ export async function POST(req: Request) {
   }
 }
 
-// API information endpoint
 export async function GET() {
   try {
     return NextResponse.json({

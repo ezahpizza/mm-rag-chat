@@ -11,9 +11,9 @@ import { formatFileSize, validateDroppedFiles } from './helpers';
 const UploadZone = ({ onDrop, onDragOver, onDragLeave, onClick, dragOver, disabled, isUploading }: UploadZoneProps) => (
   <div
     className={`
-      border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all
-      ${dragOver ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
-      ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}
+      border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all border-cerulean
+      ${dragOver ? 'bg-ocean' : 'hover:border-gray-400'}
+      ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-ocean/20'}
     `}
     onDrop={onDrop}
     onDragOver={onDragOver}

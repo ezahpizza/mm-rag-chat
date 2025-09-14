@@ -4,7 +4,7 @@ import { google } from '@ai-sdk/google';
 import { embed } from 'ai';
 import {
   parseFormData,
-  parsePdfWithFallback,
+  parseFallback,
   describeImageWithGemini,
   chunkText
 } from './controllers/indexHelpers';
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
         let fileDocs: Doc[] = [];
 
         if (mimetype === 'application/pdf') {
-          fileDocs = await parsePdfWithFallback(buffer, fileName);
+          fileDocs = await parseFallback(buffer, fileName);
         } else if (mimetype === 'image/png' || mimetype === 'image/jpeg') {
           const imageDesc = await describeImageWithGemini(buffer, fileName);
           fileDocs = [imageDesc];

@@ -20,24 +20,24 @@ export function FilterControls({
   const hasActiveFilters = riskFilter !== 'all' || categoryFilter !== 'all';
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-skye rounded-lg shadow-md p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Risk Level Filter */}
           <div className="flex flex-col">
-            <label htmlFor="risk-filter" className="text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="risk-filter" className="text-sm font-medium text-cerulean mb-1">
               Risk Level
             </label>
             <Select value={riskFilter} onValueChange={onRiskFilterChange}>
-              <SelectTrigger className="w-[200px] border-gray-300 bg-white text-gray-900 focus:border-electric focus:ring-electric">
+              <SelectTrigger className="w-[200px] border-gray-300 bg-pearl text-obsidian">
                 <SelectValue placeholder="Select risk level..." />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gray-300 shadow-lg">
+              <SelectContent className="bg-pearl border-gray-300 shadow-lg">
                 {riskOptions.map((option) => (
                   <SelectItem 
                     key={option.value} 
                     value={option.value}
-                    className="text-gray-900 hover:bg-gray-100 focus:bg-gray-100"
+                    className="text-gray-900 hover:bg-gray-100"
                   >
                     {option.label}
                   </SelectItem>
@@ -48,19 +48,19 @@ export function FilterControls({
 
           {/* Category Filter */}
           <div className="flex flex-col">
-            <label htmlFor="category-filter" className="text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="category-filter" className="text-sm font-medium text-cerulean mb-1">
               Category
             </label>
             <Select value={categoryFilter} onValueChange={onCategoryFilterChange}>
-              <SelectTrigger className="w-[200px] border-gray-300 bg-white text-gray-900 focus:border-electric focus:ring-electric">
+              <SelectTrigger className="w-[200px] border-gray-300 bg-pearl text-obsidian">
                 <SelectValue placeholder="Select category..." />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gray-300 shadow-lg">
+              <SelectContent className="bg-pearl border-gray-300 shadow-lg">
                 {categoryOptions.map((option) => (
                   <SelectItem 
                     key={option.value} 
                     value={option.value}
-                    className="text-gray-900 hover:bg-gray-100 focus:bg-gray-100"
+                    className="text-gray-900 hover:bg-gray-100"
                   >
                     {option.label}
                   </SelectItem>
@@ -98,7 +98,7 @@ export function FilterControls({
       {/* Quick Filter Buttons */}
       <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="flex flex-wrap gap-2">
-          <span className="text-sm font-medium text-gray-700 mr-2">Quick filters:</span>
+          <span className="text-sm font-medium text-cerulean mr-2">Quick filters:</span>
           
           <button
             onClick={() => onRiskFilterChange('high')}

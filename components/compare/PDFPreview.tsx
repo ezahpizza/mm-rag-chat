@@ -12,7 +12,7 @@ const PreviewHeader =({
   onDownload,
   onClose
 }: PreviewHeaderProps) => (
-  <div className="flex items-center justify-between p-4 border-b border-gray-200">
+  <div className="flex items-center justify-between p-4 border-b border-pearl">
     <div className="flex items-center space-x-2">
       <FileText size={20} className="text-red-500" />
       <h3 className="text-lg font-semibold text-gray-900 truncate">
@@ -23,9 +23,8 @@ const PreviewHeader =({
       <Button
         type="button"
         onClick={onDownload}
-        variant="outline"
-        size="sm"
-        className="text-blue-600 border-blue-600 hover:bg-blue-50"
+        size="lg"
+        className="bg-pearl text-cerulean hover:bg-electric"
       >
         <Download size={16} className="mr-1" />
         Download
@@ -33,9 +32,8 @@ const PreviewHeader =({
       <Button
         type="button"
         onClick={onClose}
-        variant="outline"
-        size="sm"
-        className="text-gray-600 border-gray-300 hover:bg-gray-50"
+        size="lg"
+        className="text-razza bg-cerulean hover:bg-electric flex items-center justify-center"
       >
         <X size={16} />
       </Button>
@@ -55,7 +53,7 @@ const PreviewContent = ({ pdfUrl, fileName, error, onDownload, onError }: Previe
   return (
     <iframe
       src={pdfUrl}
-      className="w-full h-full border border-gray-300 rounded"
+      className="w-full h-full border border-obsidian rounded"
       title={`Preview of ${fileName}`}
       onError={onError}
     />
@@ -91,8 +89,8 @@ const LoadingState = () => (
 );
 
 const PreviewFooter = ({ fileSize }: PreviewFooterProps) => (
-  <div className="p-4 border-t border-gray-200 bg-gray-50">
-    <div className="flex items-center justify-between text-sm text-gray-600">
+  <div className="p-4 border-t border-obsidian bg-persian">
+    <div className="flex items-center justify-between text-sm text-pearl">
       <span>File size: {formatFileSize(fileSize)}</span>
       <span>Type: PDF Document</span>
     </div>
@@ -130,8 +128,8 @@ export function PDFPreview({ file, isOpen, onClose }: PDFPreviewProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg w-full max-w-4xl h-full max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-[99] bg-obsidian/50 flex items-center justify-center p-4">
+      <div className="bg-ocean rounded-lg w-full max-w-4xl h-full max-h-[90vh] flex flex-col">
         <PreviewHeader
           fileName={file.name}
           onDownload={handleDownload}

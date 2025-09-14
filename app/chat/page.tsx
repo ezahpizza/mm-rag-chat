@@ -65,27 +65,27 @@ export default function ChatPage() {
 
           <div className="absolute inset-0 z-0">
             <PixelBlast
-        variant="circle"
-        pixelSize={6}
-        color="#8b67ff"
-        patternScale={3}
-        patternDensity={1.6}
-        pixelSizeJitter={0.5}
-        enableRipples
-        rippleSpeed={0.4}
-        rippleThickness={0.12}
-        rippleIntensityScale={1.5}
-        liquid
-        liquidStrength={0.12}
-        liquidRadius={1.2}
-        liquidWobbleSpeed={5}
-        speed={0.6}
-        edgeFade={0.25}
-        transparent
-      />
+              variant="circle"
+              pixelSize={6}
+              color="#8b67ff"
+              patternScale={3}
+              patternDensity={1.6}
+              pixelSizeJitter={0.5}
+              enableRipples
+              rippleSpeed={0.4}
+              rippleThickness={0.12}
+              rippleIntensityScale={1.5}
+              liquid
+              liquidStrength={0.12}
+              liquidRadius={1.2}
+              liquidWobbleSpeed={5}
+              speed={0.6}
+              edgeFade={0.25}
+              transparent
+            />
           </div>
           {/* Scrollable Content Area */}
-          <div className="flex-1 max-w-5xl overflow-y-auto scrollbar-hide p-4 pb-24 relative z-10">
+          <div className="flex-1 max-w-7xl overflow-y-auto scrollbar-hide p-4 pb-24 relative z-10">
             {/* Welcome Message */}
             {isNoMessages && (
               <div className="h-full flex items-center justify-center text-razza">

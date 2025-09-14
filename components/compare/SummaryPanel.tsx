@@ -3,6 +3,7 @@
 import { SummaryPanelProps } from "./types";
 
 export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
+  const timestamp = Date.now();
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
@@ -18,16 +19,16 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
                         metadata.alignment_stats.low_risk;
 
   const riskDistribution = [
-    { level: 'High', count: metadata.alignment_stats.high_risk, color: 'bg-red-500', textColor: 'text-red-700' },
-    { level: 'Medium', count: metadata.alignment_stats.medium_risk, color: 'bg-yellow-500', textColor: 'text-yellow-700' },
-    { level: 'Low', count: metadata.alignment_stats.low_risk, color: 'bg-green-500', textColor: 'text-green-700' },
+    { level: 'High', count: metadata.alignment_stats.high_risk, color: 'bg-red-600', textColor: 'text-red-600' },
+    { level: 'Medium', count: metadata.alignment_stats.medium_risk, color: 'bg-yellow-600', textColor: 'text-yellow-600' },
+    { level: 'Low', count: metadata.alignment_stats.low_risk, color: 'bg-green-600', textColor: 'text-green-300' },
   ];
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="mt-8 bg-pearl rounded-lg shadow-md overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-electric to-persian px-6 py-4">
-        <h2 className="text-xl font-bold text-white">
+        <h2 className="text-xl font-bold text-pearl">
           Comparison Summary
         </h2>
         <p className="text-blue-100 text-sm mt-1">
@@ -37,26 +38,26 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
 
       <div className="p-6">
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 text-obsidian text-sm">
           {/* Documents Info */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Documents Analyzed</h3>
+          <div className="bg-skye rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-cerulean mb-3">Documents Analyzed</h3>
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">First Document:</span>
-                <span className="text-sm font-medium text-gray-900 truncate ml-2" title={metadata.docA.id}>
+              <div className="flex items-center justify-between ">
+                <span> First Document:</span>
+                <span className="font-medium truncate ml-2" title={metadata.docA.id}>
                   {metadata.docA.id}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Second Document:</span>
-                <span className="text-sm font-medium text-gray-900 truncate ml-2" title={metadata.docB.id}>
+                <span>Second Document:</span>
+                <span className="truncate ml-2" title={metadata.docB.id}>
                   {metadata.docB.id}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                <span className="text-sm text-gray-600">Comparisons:</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span >Comparisons:</span>
+                <span className="font-medium">
                   {metadata.alignment_stats.total_alignments}
                 </span>
               </div>
@@ -64,21 +65,21 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
           </div>
 
           {/* Risk Distribution */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Risk Distribution</h3>
+          <div className="bg-electric rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-pearl mb-3">Risk Distribution</h3>
             <div className="space-y-3">
               {riskDistribution.map((risk) => (
                 <div key={risk.level} className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className={`w-3 h-3 rounded-full ${risk.color} mr-2`}></div>
-                    <span className="text-sm text-gray-600">{risk.level} Risk</span>
+                    <span className="text-sm text-obsidian font-medium">{risk.level} Risk</span>
                   </div>
                   <div className="flex items-center">
                     <span className={`text-sm font-medium ${risk.textColor}`}>
                       {risk.count}
                     </span>
                     {totalRiskItems > 0 && (
-                      <span className="text-xs text-gray-500 ml-1">
+                      <span className="text-xs text-pearl ml-1">
                         ({Math.round((risk.count / totalRiskItems) * 100)}%)
                       </span>
                     )}
@@ -89,24 +90,24 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
           </div>
 
           {/* Quick Stats */}
-          <div className="bg-gray-50 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Analysis Stats</h3>
-            <div className="space-y-2">
+          <div className="bg-persian rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-skye mb-3">Analysis Stats</h3>
+            <div className="space-y-2 text-pearl text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Doc A Clauses:</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span>Doc A Clauses:</span>
+                <span className="font-medium text-skye">
                   {metadata.docA.total_clauses}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Doc B Clauses:</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span> Doc B Clauses:</span>
+                <span className="font-medium text-skye">
                   {metadata.docB.total_clauses}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                <span className="text-sm text-gray-600">Generated:</span>
-                <span className="text-xs text-gray-500">
+                <span>Generated:</span>
+                <span className="text-xs ">
                   {formatDate(metadata.generated_at)}
                 </span>
               </div>
@@ -115,17 +116,14 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
         </div>
 
         {/* AI-Generated Summary */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div className="bg-skye/50 border border-obsidian rounded-lg p-6">
           <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <span className="text-2xl">🤖</span>
-            </div>
             <div className="ml-3 flex-1">
-              <h3 className="text-lg font-semibold text-blue-900 mb-3">
-                AI Analysis Summary
+              <h3 className="text-lg font-semibold text-persian mb-3">
+                Analysis Summary
               </h3>
               <div className="prose prose-sm max-w-none">
-                <div className="text-blue-800 leading-relaxed whitespace-pre-line">
+                <div className="text-cerulean leading-relaxed whitespace-pre-line">
                   {summary}
                 </div>
               </div>

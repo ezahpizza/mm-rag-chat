@@ -1,6 +1,6 @@
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
-import { LlamaParseReader } from '@llamaindex/cloud';
+import { LlamaParseReader } from 'llama-cloud-services';
 import { writeFile, unlink } from 'fs/promises';
 import os from 'os';
 import path from 'path';
@@ -21,12 +21,12 @@ export async function parseFormData(req: Request): Promise<{ files: File[] }> {
   }
 }
 
-export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
+export async function parseFallback(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
   try {
     const apiKey = process.env.LLAMA_CLOUD_API_KEY || process.env.LLAMA_CLOUD_APIKEY;
     if (!apiKey) {
       console.warn('Missing LlamaCloud API key, using fallback');
-      return await parseWithBasicExtraction(buffer, fileName);
+      return await parseBasic(buffer, fileName);
     }
     const reader = new LlamaParseReader({
       resultType: 'markdown',
@@ -43,7 +43,7 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Pr
       console.log('LlamaParse completed, docs:', docs?.length || 0);
       if (!docs || docs.length === 0) {
         console.warn('No documents parsed with LlamaParse, using fallback');
-        return await parseWithBasicExtraction(buffer, fileName);
+        return await parseBasic(buffer, fileName);
       }
       return docs.map((doc: { getText?: () => string; text?: string; metadata?: Record<string, unknown> }, index: number) => {
         const text = doc.getText ? doc.getText() : doc.text || '';
@@ -70,11 +70,11 @@ export async function parsePdfWithFallback(buffer: Buffer, fileName: string): Pr
   } catch {
     // Lint: ignore unused error variable
     console.error('Error in LlamaParse, falling back');
-    return await parseWithBasicExtraction(buffer, fileName);
+    return await parseBasic(buffer, fileName);
   }
 }
 
-export async function parseWithBasicExtraction(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
+export async function parseBasic(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
   try {
     try {
       // Dynamic import for pdf-parse to avoid require lint error

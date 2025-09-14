@@ -1,32 +1,37 @@
 import { google } from '@ai-sdk/google';
 import { generateText } from 'ai';
-import { ComparisonResponse, ComparisonResult, Extraction } from '@/components/compare';
+import { ComparisonResponse, ComparisonResult } from '@/components/compare';
 
-// Public entry point 
 export async function compareDocuments(fileA: File, fileB: File): Promise<ComparisonResponse> {
   const start = Date.now();
-  const [bufA, bufB] = await Promise.all([fileA.arrayBuffer(), fileB.arrayBuffer()]);
+  console.log(`Starting Gemini native PDF comparison for: ${fileA.name} and ${fileB.name}`);
 
-  const systemInstruction = `You are an expert legal document comparison engine.
-You receive TWO full legal documents (Document A and Document B) as PDF file inputs.
-TASKS:
-1. Extract salient CLAUSES from each document. A clause is a coherent provision. Focus on: Financial, Termination, Liability, Obligations, Rights. Others go to Other.
-2. For each clause in A find the best corresponding clause in B (semantic + functional similarity). If no suitable match (similarity < meaningful alignment) you may skip it.
-3. Produce at most the top 60 most material aligned clause differences (prioritize higher risk & substantive differences; exclude trivial punctuation-only differences).
-4. For each aligned pair produce:
-   - clause: short human-readable label (e.g. Payment Terms, Termination Notice, Liability Cap)
-   - docA_text: concise excerpt (<= 500 chars) capturing essence of A clause
-   - docB_text: concise excerpt (<= 500 chars)
-   - difference_summary: concrete, specific difference (quote figures/periods/caps)
-   - impact: which party benefits / practical consequence
-   - risk_level: high | medium | low (high = material financial/legal exposure; medium = notable but moderate; low = stylistic/minor)
-   - category: one of Financial | Termination | Liability | Obligations | Rights | Other
-5. Generate an EXECUTIVE SUMMARY (3-4 paragraphs) that:
-   - Opens with quantitative overview (counts by risk/category)
-   - Details key high & medium risk diffs SPECIFICALLY (include numbers, timeframes, caps)
-   - Gives category clustering insights
-   - Concludes with prioritized actionable recommendations.
-6. Output STRICT JSON ONLY matching this TypeScript schema (no markdown fences, no commentary):
+  // Convert files to base64 for Gemini
+  const [bufferA, bufferB] = await Promise.all([
+    fileA.arrayBuffer(),
+    fileB.arrayBuffer()
+  ]);
+
+  const [base64A, base64B] = [
+    Buffer.from(bufferA).toString('base64'),
+    Buffer.from(bufferB).toString('base64')
+  ];
+
+  // Enhanced system prompt for better legal document analysis
+  const systemPrompt = `You are an expert legal document analyst. Compare these two legal documents comprehensively and identify all substantive differences. Focus on:
+
+1. **Financial Terms**: Salary, bonuses, benefits, compensation structures, payment schedules
+2. **Employment Terms**: Job titles, responsibilities, reporting structures, work arrangements
+3. **Time-based Clauses**: Contract duration, notice periods, probation periods, renewal terms
+4. **Termination Conditions**: Grounds for termination, severance, post-termination obligations
+5. **Legal Obligations**: Confidentiality, non-compete, intellectual property, compliance requirements
+6. **Rights and Benefits**: Leave policies, training, equipment, reimbursements
+7. **Liability and Risk**: Indemnification, limitation of liability, dispute resolution
+8. **Governance**: Jurisdiction, governing law, amendment procedures
+
+Analyze both documents thoroughly and provide detailed comparisons with specific examples and implications.`;
+
+  const schemaInstruction = `Return ONLY JSON (no markdown, no commentary):
 {
   "comparisons": [
     {
@@ -47,68 +52,62 @@ TASKS:
     "generated_at": string
   }
 }
-RULES:
-- MUST be valid JSON parsable by JSON.parse.
-- Do not include keys with null/undefined.
-- Use ISO8601 UTC timestamp for generated_at.
-- If a doc lacks a category entirely set counts accordingly but still include category in any comparisons where relevant.
-`;
 
-  const [extractedA, extractedB] = await Promise.all([
-    extractPdf(Buffer.from(bufA), fileA.name),
-    extractPdf(Buffer.from(bufB), fileB.name)
-  ]);
+Rules:
+- Identify ALL substantive differences, no limit on number
+- Focus on material changes that affect rights, obligations, or financial terms
+- Extract exact text excerpts from both documents for comparison
+- Assess risk level based on potential impact on the parties
+- Use concise but descriptive clause labels
+- Provide detailed impact analysis for each difference
+- Use UTC ISO timestamp for generated_at
+- If no differences found, explain why in the summary`;
 
-  const maxCharsPerDoc = 45000; // safeguard against context window
-  const docATrimmed = extractedA.text.slice(0, maxCharsPerDoc);
-  const docBTrimmed = extractedB.text.slice(0, maxCharsPerDoc);
-
-  const maybeEmbedA = extractedA.lowConfidence ? `\n<<DOCUMENT_A_BASE64_PDF>>\n${extractedA.base64?.slice(0, 12000) || ''}\n<<END_DOCUMENT_A_BASE64_PDF>>` : '';
-  const maybeEmbedB = extractedB.lowConfidence ? `\n<<DOCUMENT_B_BASE64_PDF>>\n${extractedB.base64?.slice(0, 12000) || ''}\n<<END_DOCUMENT_B_BASE64_PDF>>` : '';
-
-  const documentsSection = `<<DOCUMENT_A_START>>\n${docATrimmed}\n<<DOCUMENT_A_END>>${maybeEmbedA}\n\n<<DOCUMENT_B_START>>\n${docBTrimmed}\n<<DOCUMENT_B_END>>${maybeEmbedB}`;
-
-  const fullPrompt = `${systemInstruction}\n\nDOCUMENT SOURCE TEXTS:\n${documentsSection}`;
-
+  // Use Gemini's multimodal capabilities to process PDFs directly
   const { text: raw } = await generateText({
-    model: google('gemini-2.5-flash'),
-    prompt: fullPrompt,
+    model: google('gemini-2.5-pro'),
+    messages: [
+      {
+        role: 'system',
+        content: systemPrompt
+      },
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: `Please compare these two legal documents and identify all substantive differences. Document A is "${fileA.name}" and Document B is "${fileB.name}". ${schemaInstruction}`
+          },
+          {
+            type: 'file',
+            data: base64A,
+            mimeType: 'application/pdf'
+          },
+          {
+            type: 'file', 
+            data: base64B,
+            mimeType: 'application/pdf'
+          }
+        ]
+      }
+    ]
   });
 
   const cleaned = sanitizeJsonString(raw);
-  let parsed: ComparisonResponse | null = null;
-  try {
-    parsed = JSON.parse(cleaned);
-  } catch (err) {
-    // Attempt to salvage JSON substring
-    const salvage = attemptSalvage(cleaned);
-    if (salvage) {
-      try { parsed = JSON.parse(salvage); } catch {/* ignore */}
-    }
-  }
-
-  if (!parsed) {
-    return buildFallbackResponse(fileA.name, fileB.name, cleaned);
-  }
-
-  // Post-process / normalize
-  const normalized = normalizeResponse(parsed, fileA.name, fileB.name);
+  const parsed = strictParse(cleaned, fileA.name, fileB.name);
+  const validated = simpleValidate(parsed, fileA.name, fileB.name);
+  const normalized = normalizeResponse(validated, fileA.name, fileB.name);
   console.log(`Gemini comparison completed in ${(Date.now() - start)}ms with ${normalized.comparisons.length} comparisons.`);
   return normalized;
 }
 
-// -------------------- Helpers --------------------
-
 function sanitizeJsonString(raw: string): string {
   let txt = raw.trim();
-  // Remove markdown code fences if present
   if (txt.startsWith('```')) {
     txt = txt.replace(/^```[a-zA-Z]*\n?/, '').replace(/```$/, '').trim();
   }
-  // Remove any leading explanation before first '{'
   const firstBrace = txt.indexOf('{');
   if (firstBrace > 0) txt = txt.slice(firstBrace);
-  // Remove trailing after last '}'
   const lastBrace = txt.lastIndexOf('}');
   if (lastBrace !== -1) txt = txt.slice(0, lastBrace + 1);
   return txt;
@@ -124,7 +123,7 @@ function attemptSalvage(txt: string): string | null {
 function buildFallbackResponse(docAId: string, docBId: string, raw: string): ComparisonResponse {
   return {
     comparisons: [],
-    summary: `Automated structured comparison failed to parse. Raw model output retained for manual review.`,
+    summary: 'Model output could not be parsed into JSON. Raw output truncated.',
     metadata: {
       docA: { id: docAId, total_clauses: 0, compared_clauses: 0 },
       docB: { id: docBId, total_clauses: 0, compared_clauses: 0 },
@@ -134,16 +133,96 @@ function buildFallbackResponse(docAId: string, docBId: string, raw: string): Com
   };
 }
 
+function strictParse(cleaned: string, docAId: string, docBId: string): ComparisonResponse {
+  let parsed: any = null;
+  try { parsed = JSON.parse(cleaned); } catch {
+    const salvage = attemptSalvage(cleaned);
+    if (salvage) {
+      try { parsed = JSON.parse(salvage); } catch { return buildFallbackResponse(docAId, docBId, cleaned); }
+    } else {
+      return buildFallbackResponse(docAId, docBId, cleaned);
+    }
+  }
+  if (!parsed || typeof parsed !== 'object') return buildFallbackResponse(docAId, docBId, cleaned);
+  if (!Array.isArray(parsed.comparisons) || typeof parsed.summary !== 'string' || !parsed.metadata) {
+    return buildFallbackResponse(docAId, docBId, cleaned);
+  }
+  return parsed as ComparisonResponse;
+}
+
+function simpleValidate(resp: ComparisonResponse, docAId: string, docBId: string): ComparisonResponse {
+  const validCategories = new Set(['Financial','Termination','Liability','Obligations','Rights','Other']);
+  const validRisks = new Set(['high','medium','low']);
+  const structuralNoisePatterns = [
+    /cross[- ]?reference/i,
+    /xref/i,
+    /object offsets?/i,
+    /stream length/i,
+    /unique file identifier/i,
+    /trailer dictionary/i,
+    /pdf version/i,
+    /byte (?:range|offset)/i,
+    /object id/i,
+    /internal structure/i
+  ];
+
+  const cleaned: ComparisonResult[] = [];
+  for (const c of resp.comparisons || []) {
+    if (!c) continue;
+    const clause = (c.clause || '').toString().trim();
+    const docA_text = (c.docA_text || '').toString().trim();
+    const docB_text = (c.docB_text || '').toString().trim();
+    const difference_summary = (c.difference_summary || '').toString().trim();
+    const impact = (c.impact || '').toString().trim();
+    const risk_level = validRisks.has(c.risk_level) ? c.risk_level : 'medium';
+    const category = validCategories.has(c.category) ? c.category : 'Other';
+
+    if (!clause || !docA_text || !docB_text || !difference_summary || !impact) continue;
+    
+    // Allow longer text excerpts for better legal analysis
+    if (docA_text.length > 1000 || docB_text.length > 1000) continue;
+
+    // Filter structural noise - should be less likely with native PDF processing
+    const structuralHit = structuralNoisePatterns.some(rx => 
+      rx.test(difference_summary) || rx.test(docA_text) || rx.test(docB_text) || rx.test(clause)
+    );
+    if (structuralHit) continue;
+
+    cleaned.push({ clause, docA_text, docB_text, difference_summary, impact, risk_level: risk_level as any, category: category as any });
+  }
+
+  // Deduplicate by clause and content similarity
+  const seen = new Set<string>();
+  const deduped: ComparisonResult[] = [];
+  for (const c of cleaned) {
+    const key = c.clause + '|' + c.difference_summary.slice(0, 50);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(c);
+  }
+
+  return {
+    comparisons: deduped, 
+    summary: resp.summary || (deduped.length === 0 ? 'No substantive differences identified between the documents.' : `Identified ${deduped.length} substantive differences between the documents.`),
+    metadata: {
+      docA: { id: docAId, total_clauses: resp.metadata?.docA?.total_clauses ?? deduped.length, compared_clauses: deduped.length },
+      docB: { id: docBId, total_clauses: resp.metadata?.docB?.total_clauses ?? deduped.length, compared_clauses: deduped.length },
+      alignment_stats: resp.metadata?.alignment_stats || { total_alignments: deduped.length, high_risk: 0, medium_risk: 0, low_risk: 0 },
+      generated_at: new Date().toISOString(),
+    }
+  };
+}
+
 function normalizeResponse(resp: ComparisonResponse, docAId: string, docBId: string): ComparisonResponse {
   const validCategories = new Set(['Financial','Termination','Liability','Obligations','Rights','Other']);
   const validRisks = new Set(['high','medium','low']);
 
   const cleanedComparisons: ComparisonResult[] = (resp.comparisons || []).map(c => ({
-    clause: truncate(c.clause || 'Clause', 80),
-    docA_text: truncate(c.docA_text || '', 500),
-    docB_text: truncate(c.docB_text || '', 500),
-    difference_summary: truncate(c.difference_summary || 'No difference summary provided.', 600),
-    impact: truncate(c.impact || 'Impact not provided.', 400),
+    clause: truncate(c.clause || 'Clause', 100), // Longer clause descriptions
+    docA_text: truncate(c.docA_text || '', 800), // Longer excerpts for legal context
+    docB_text: truncate(c.docB_text || '', 800),
+    difference_summary: truncate(c.difference_summary || 'No difference summary provided.', 800), // More detailed summaries
+    impact: truncate(c.impact || 'Impact not provided.', 600), // More detailed impact analysis
     risk_level: validRisks.has(c.risk_level) ? c.risk_level : 'medium',
     category: validCategories.has(c.category) ? c.category : 'Other',
   }));
@@ -152,10 +231,7 @@ function normalizeResponse(resp: ComparisonResponse, docAId: string, docBId: str
   const medium = cleanedComparisons.filter(c => c.risk_level === 'medium').length;
   const low = cleanedComparisons.filter(c => c.risk_level === 'low').length;
 
-  // Derive totals if model omitted or miscounted.
   const totalAlignments = cleanedComparisons.length;
-
-  // Extract numbers the model claimed for total clauses if present; else estimate.
   const docAClauses = resp.metadata?.docA?.total_clauses ?? cleanedComparisons.length;
   const docBClauses = resp.metadata?.docB?.total_clauses ?? cleanedComparisons.length;
 
@@ -166,7 +242,7 @@ function normalizeResponse(resp: ComparisonResponse, docAId: string, docBId: str
       docA: { id: docAId, total_clauses: docAClauses, compared_clauses: cleanedComparisons.length },
       docB: { id: docBId, total_clauses: docBClauses, compared_clauses: cleanedComparisons.length },
       alignment_stats: { total_alignments: totalAlignments, high_risk: high, medium_risk: medium, low_risk: low },
-      generated_at: resp.metadata?.generated_at || new Date().toISOString(),
+      generated_at: new Date().toISOString(),
     },
   };
 }
@@ -175,42 +251,3 @@ function truncate(str: string, max: number): string {
   if (!str) return '';
   return str.length > max ? str.slice(0, max - 3) + '...' : str;
 }
-
-// -------------------- PDF Text Extraction --------------------
-
-
-async function extractPdf(buffer: Buffer, fileName: string): Promise<Extraction> {
-  let rawText = '';
-  let lowConfidence = false;
-  try {
-    const pdfParseModule = await import('pdf-parse');
-    const pdf = (pdfParseModule as any).default || pdfParseModule;
-    const data: { text: string; numpages: number } = await pdf(buffer);
-    rawText = (data.text || '').replace(/\u0000/g, ' ').trim();
-    if (!rawText || rawText.length < 50) {
-      lowConfidence = true;
-    }
-  } catch (e) {
-    console.warn('Primary pdf-parse failed for', fileName);
-    lowConfidence = true;
-  }
-
-  // Heuristic fallback: attempt to salvage printable characters if pdf-parse weak.
-  if (lowConfidence) {
-    if (!rawText) {
-      // extract naive printable bytes
-      const ascii = buffer.toString('latin1').replace(/[^\x20-\x7E\n]+/g, ' ').replace(/ +/g, ' ').trim();
-      rawText = ascii.slice(0, 20000) || `Unable to extract meaningful text from ${fileName}.`;
-    }
-  }
-
-  // Final sanitation: collapse excessive blank lines
-  const cleaned = rawText.split(/\n+/).map(l => l.trim()).filter(l => l.length > 0).join('\n');
-
-  return {
-    text: cleaned || `No extractable text found in ${fileName}.`,
-    lowConfidence,
-    base64: lowConfidence ? buffer.toString('base64') : undefined,
-  };
-}
-

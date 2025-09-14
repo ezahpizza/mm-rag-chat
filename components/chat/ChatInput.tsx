@@ -90,15 +90,15 @@ export default function ChatInput({
           />
         </form>
       </fieldset>
-      <div className="bg-white disabled:bg-white/50">
+      <div>
         <div className="flex flex-wrap gap-4">
           {files.map((file, index) => (
             <div
               key={index}
-              className="mt-4 w-40 relative cursor-pointer rounded-md flex shadow text-md bg-white"
+              className="mt-4 w-40 relative cursor-pointer rounded-md flex shadow text-md bg-pearl"
             >
               <button className="absolute inset-0 cursor-pointer hover:bg-black/5 w-40"></button>
-              <div className="flex-shrink-0 w-12 h-12 bg-pearl rounded-tl-md rounded-bl-md grid place-items-center text-white font-medium uppercase truncate">
+              <div className="flex-shrink-0 w-12 h-12 bg-cerulean rounded-tl-md rounded-bl-md grid place-items-center text-white font-medium uppercase truncate">
                 {file.name.split(".")[1]?.toUpperCase() || 'FILE'}
               </div>
               <div className="py-2 px-3 min-w-0">
@@ -109,7 +109,7 @@ export default function ChatInput({
                   {(file.size / 1024).toFixed(2)} KB
                 </div>
                 <div
-                  className="absolute top-0 right-0 bg-white shadow rounded-full cursor-pointer hover:bg-stone-100 translate-x-2 -translate-y-2 z-10"
+                  className="absolute top-0 right-0 bg-white shadow rounded-full cursor-pointer hover:bg-ocean translate-x-2 -translate-y-2 z-10"
                   onClick={() => removeFile(index)}
                 >
                   <XCircle size={20} />
