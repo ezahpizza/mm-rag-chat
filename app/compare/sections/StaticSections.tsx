@@ -52,7 +52,7 @@ export const HelpSection = () => (
       </li>
       <li className="flex items-start">
         <span className="mr-2">3.</span>
-        Click "Compare Documents" to automatically parse, index, and analyze differences.
+        Click &ldquo;Compare Documents&rdquo; to automatically parse, index, and analyze differences.
       </li>
       <li className="flex items-start">
         <span className="mr-2">4.</span>

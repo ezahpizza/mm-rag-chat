@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 export const runtime = 'nodejs';
-import { parseFormData } from '../index-documents/controllers/indexHelpers';
+import { parseFormData } from '@/lib/formUtils';
 import { compareDocuments } from '@/lib/compareDocuments';
 import { ComparisonResponse } from '@/components/compare/types';
 

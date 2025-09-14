@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { 
   ComparisonResponse, 
+  ComparisonResult,
   ComparePageState, 
   RiskLevel, 
   Category,
@@ -148,7 +149,7 @@ export const createResetAllHandler = (
  * Filter helpers
  */
 export const filterComparisons = (
-  comparisons: any[],
+  comparisons: ComparisonResult[],
   riskFilter: RiskLevel,
   categoryFilter: Category
 ) => {

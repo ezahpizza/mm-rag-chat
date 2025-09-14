@@ -98,7 +98,7 @@ export interface ComparePageState {
 export interface ComparisonApiError {
   error: string;
   timestamp: string;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 // Event handler types

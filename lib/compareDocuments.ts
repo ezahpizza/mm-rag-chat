@@ -120,7 +120,7 @@ function attemptSalvage(txt: string): string | null {
   return txt.slice(first, last + 1);
 }
 
-function buildFallbackResponse(docAId: string, docBId: string, raw: string): ComparisonResponse {
+function buildFallbackResponse(docAId: string, docBId: string): ComparisonResponse {
   return {
     comparisons: [],
     summary: 'Model output could not be parsed into JSON. Raw output truncated.',
@@ -134,18 +134,18 @@ function buildFallbackResponse(docAId: string, docBId: string, raw: string): Com
 }
 
 function strictParse(cleaned: string, docAId: string, docBId: string): ComparisonResponse {
-  let parsed: any = null;
+  let parsed: unknown = null;
   try { parsed = JSON.parse(cleaned); } catch {
     const salvage = attemptSalvage(cleaned);
     if (salvage) {
-      try { parsed = JSON.parse(salvage); } catch { return buildFallbackResponse(docAId, docBId, cleaned); }
+      try { parsed = JSON.parse(salvage); } catch { return buildFallbackResponse(docAId, docBId); }
     } else {
-      return buildFallbackResponse(docAId, docBId, cleaned);
+      return buildFallbackResponse(docAId, docBId);
     }
   }
-  if (!parsed || typeof parsed !== 'object') return buildFallbackResponse(docAId, docBId, cleaned);
-  if (!Array.isArray(parsed.comparisons) || typeof parsed.summary !== 'string' || !parsed.metadata) {
-    return buildFallbackResponse(docAId, docBId, cleaned);
+  if (!parsed || typeof parsed !== 'object') return buildFallbackResponse(docAId, docBId);
+  if (!Array.isArray((parsed as Record<string, unknown>).comparisons) || typeof (parsed as Record<string, unknown>).summary !== 'string' || !(parsed as Record<string, unknown>).metadata) {
+    return buildFallbackResponse(docAId, docBId);
   }
   return parsed as ComparisonResponse;
 }
@@ -188,7 +188,7 @@ function simpleValidate(resp: ComparisonResponse, docAId: string, docBId: string
     );
     if (structuralHit) continue;
 
-    cleaned.push({ clause, docA_text, docB_text, difference_summary, impact, risk_level: risk_level as any, category: category as any });
+    cleaned.push({ clause, docA_text, docB_text, difference_summary, impact, risk_level: risk_level as 'high' | 'medium' | 'low', category: category as 'Financial' | 'Termination' | 'Liability' | 'Obligations' | 'Rights' | 'Other' });
   }
 
   // Deduplicate by clause and content similarity

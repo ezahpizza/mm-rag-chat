@@ -3,7 +3,6 @@
 import { SummaryPanelProps } from "./types";
 
 export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
-  const timestamp = Date.now();
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',

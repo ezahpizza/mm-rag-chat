@@ -5,22 +5,6 @@ import { writeFile, unlink } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 
-export async function parseFormData(req: Request): Promise<{ files: File[] }> {
-  try {
-    const formData = await req.formData();
-    const files: File[] = [];
-    for (const [key, value] of formData.entries()) {
-      if (key === 'files' && value instanceof File) {
-        files.push(value);
-      }
-    }
-    return { files };
-  } catch (error) {
-    console.error('Error parsing form data:', error);
-    throw new Error('Failed to parse form data');
-  }
-}
-
 export async function parseFallback(buffer: Buffer, fileName: string): Promise<Array<{ text: string; metadata: Record<string, unknown> }>> {
   try {
     const apiKey = process.env.LLAMA_CLOUD_API_KEY || process.env.LLAMA_CLOUD_APIKEY;

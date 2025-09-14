@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { google } from '@ai-sdk/google';
 import { embed } from 'ai';
+import { parseFormData } from '@/lib/formUtils';
 import {
-  parseFormData,
   parseFallback,
   describeImageWithGemini,
   chunkText
