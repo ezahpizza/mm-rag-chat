@@ -6,7 +6,8 @@ export const items = [
       links: [
         { label: "Home", href: "/", ariaLabel: "Home" },
         { label: "Lexi", href: "/chat", ariaLabel: "Chatbot" },
-        { label: "Diffex", href: "/compare", ariaLabel: "Document Comparison" }
+        { label: "Diffex", href: "/compare", ariaLabel: "Document Comparison" },
+        { label: "PopLegal", href: "/genZAnalyze", ariaLabel: "Gen-Z Analysis" }
       ]
     },
     {

@@ -3,6 +3,7 @@ import {
   FiChevronsRight,
   FiSave,
   FiDownload,
+  FiTrash2,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -35,25 +36,27 @@ interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
   messages: Message[];
+  onClearChat?: () => void;
 }
 
 interface NavSectionProps {
   children: React.ReactNode;
   messages?: Message[];
+  onClearChat?: () => void;
 }
 
-export const NavSection = ({ children, messages = [] }: NavSectionProps) => {
+export const NavSection = ({ children, messages = [], onClearChat }: NavSectionProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex bg-persian min-h-screen">
-      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} messages={messages} />
+      <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} messages={messages} onClearChat={onClearChat} />
       <Content>{children}</Content>
     </div>
   );
 };
 
-const Sidebar = ({ isOpen, setIsOpen, messages }:SidebarProps) => {
+const Sidebar = ({ isOpen, setIsOpen, messages, onClearChat }:SidebarProps) => {
   const [selected, setSelected] = useState("Dashboard");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingType, setProcessingType] = useState<'save' | 'export' | null>(null);
@@ -135,6 +138,15 @@ const Sidebar = ({ isOpen, setIsOpen, messages }:SidebarProps) => {
           onClick={handleSummarizeAndExportClick}
           disabled={!hasMessages || isProcessing}
           isLoading={isProcessing && processingType === 'export'}
+        />
+        <Option
+          Icon={FiTrash2}
+          title="Clear Chat"
+          selected={selected}
+          setSelected={setSelected}
+          open={isOpen}
+          onClick={onClearChat}
+          disabled={!hasMessages || isProcessing}
         />
       </div>
 

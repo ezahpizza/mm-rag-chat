@@ -26,6 +26,7 @@ export default function ChatPage() {
     isLoading,
     error,
     append,
+    setMessages,
   } = useChat({
     api: '/api/chat',
     body: { mode: selectedMode },
@@ -57,8 +58,13 @@ export default function ChatPage() {
 
   const isNoMessages = messages.length === 0 && !isRecording;
 
+  // Clear chat function
+  const handleClearChat = () => {
+    setMessages([]);
+  };
+
   return (
-    <NavSection messages={messages}>
+    <NavSection messages={messages} onClearChat={handleClearChat}>
       <div className="bg-persian h-screen overflow-hidden p-4">
         {/* Main Content */}
         <main className="w-full bg-obsidian mx-auto rounded-2xl relative h-full flex flex-col items-center">

@@ -68,14 +68,14 @@ export default function ChatInput({
     setFiles(files.filter((_, i) => i !== index));
   };
   return (
-    <div className="bg-ocean rounded-xl py-2 px-2 m-3 relative min-h-20">
+    <div className="bg-ocean rounded-xl py-2 pb-10 px-2 m-3 relative min-h-20">
       <fieldset className="grid p-2 sm:grid-flow-col sm:grid-cols-[minmax(0,_1fr)_auto] sm:gap-2 w-full rounded-3xl backdrop-blur-xl disabled:bg-white/50">
         <form
           onSubmit={handleSubmit}
         >
           <textarea
             ref={textareaRef}
-            className="p-1.5 resize-none focus:outline-none w-full h-auto text-md text-obsidian placeholder:text-obsidian placeholder:text-md"
+            className="p-1.5 resize-auto focus:outline-none w-full h-auto text-md text-obsidian placeholder:text-obsidian"
             value={input}
             placeholder="How can I help you today?"
             onChange={handleTextareaChange}

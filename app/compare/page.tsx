@@ -16,7 +16,7 @@ import {
   shouldShowHelp
 } from '@/components/compare/controllers';
 
-import Pixels from '@/components/home/Pixels';
+import PixelBlast from '@/components/chat/PixelBlast';
 import { CardNav } from '@/components/global/CardNav';
 import { items } from '@/constants/home-items';
 import { DocumentUploadSection, 
@@ -114,7 +114,7 @@ export default function ComparePage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-obsidian">
       <div className="absolute inset-0 z-0">
-       <Pixels
+       <PixelBlast
         variant="circle"
         pixelSize={6}
         color="#8b67ff"
@@ -136,7 +136,7 @@ export default function ComparePage() {
       </div>
             
       <div className="flex-1 scrollbar-hide p-4 relative z-10 items-center w-7xl">
-          <CardNav
+      <CardNav
           logo="/logo.svg"
           logoAlt="Company Logo"
           items={items}
