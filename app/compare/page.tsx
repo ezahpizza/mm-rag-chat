@@ -16,14 +16,14 @@ import {
   shouldShowHelp
 } from '@/components/compare/controllers';
 
-import PixelBlast from '@/components/chat/PixelBlast';
+import PixelBlast from '@/components/global/PixelBlast';
 import { CardNav } from '@/components/global/CardNav';
+import { DocumentAnalysisLoader } from '@/components/global/SpringModal';
 import { items } from '@/constants/home-items';
 import { DocumentUploadSection, 
         ActionButtons, 
         ResultsSection, 
         ErrorDisplay, 
-        ProgressDisplay, 
         HelpSection, 
         PageHeader } from './sections';
 import { exportComparisonReportToPDF } from '@/lib/pdf';
@@ -173,7 +173,11 @@ export default function ComparePage() {
       />
 
       {error && <ErrorDisplay error={error} />}
-      {isComparing && <ProgressDisplay />}
+      <DocumentAnalysisLoader
+        isOpen={isComparing}
+        title="Processing Documents"
+        description="This may take a few moments as we parse, index, and analyze your documents."
+      />
 
       {comparisonResult && (
         <ResultsSection
@@ -198,7 +202,6 @@ export default function ComparePage() {
 
       </div>
 
-      
     </main>
   );
 }

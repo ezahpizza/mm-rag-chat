@@ -83,7 +83,7 @@ export const DragCloseDrawer = ({ open, setOpen, result, onClose }: DragCloseDra
                 className="h-2 w-14 cursor-grab touch-none rounded-full bg-razza active:cursor-grabbing"
               ></button>
             </div>
-            <div className="relative z-0 h-full overflow-y-scroll p-4 pt-12 scrollbar-hide">
+            <div className="relative z-0 h-full overflow-y-scroll p-4 pt-12 scrollbar-hide select-none">
               <div className="mx-auto max-w-2xl space-y-4 text-neutral-400">
                 <h2 className="text-4xl font-bold text-skye">
                   {result.category}

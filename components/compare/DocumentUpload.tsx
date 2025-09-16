@@ -56,7 +56,7 @@ const FileDisplay = ({
   onRemove,
   disabled
 }: FileDisplayProps) => (
-  <div className="border border-gray-200 rounded-lg p-4 bg-white">
+  <div className="border border-gray-200 rounded-lg p-4 bg-skye">
     <div className="flex items-center justify-between">
       <FileInfo file={file} />
       <FileActions 
@@ -70,11 +70,11 @@ const FileDisplay = ({
 
 const FileInfo = ({ file }: FileInfoProps) => (
   <div className="flex items-center space-x-3">
-    <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
-      <FileText size={20} className="text-white" />
+    <div className="flex-shrink-0 w-10 h-10 bg-electric rounded-lg flex items-center justify-center">
+      <FileText size={20} className="text-pearl" />
     </div>
     <div className="flex-1 min-w-0">
-      <p className="text-sm font-medium text-gray-900 truncate">
+      <p className="text-sm font-medium text-obsidian truncate">
         {file.name}
       </p>
       <p className="text-sm text-gray-500">
@@ -94,24 +94,20 @@ const FileActions = ({
       <Button
         type="button"
         onClick={onPreview}
-        variant="outline"
         size="sm"
-        className="text-blue-600 border-blue-600 hover:bg-blue-50"
+        className="text-pearl bg-persian hover:bg-ocean transition-colors duration-150 flex items-center justify-center"
       >
-        <Eye size={16} className="mr-1" />
-        Preview
+        <Eye size={16} />
       </Button>
     )}
     <Button
       type="button"
       onClick={onRemove}
-      variant="outline"
       size="sm"
-      className="text-red-600 border-red-600 hover:bg-red-50"
+      className="text-pearl bg-red-600 hover:bg-cerulean transition-colors duration-150 flex items-center justify-center"
       disabled={disabled}
     >
-      <X size={16} className="mr-1" />
-      Remove
+      <X size={16} />
     </Button>
   </div>
 );
