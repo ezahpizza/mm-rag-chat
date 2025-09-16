@@ -9,7 +9,7 @@ const Copy = () => {
       <div className="mx-auto flex max-w-7xl items-end justify-between p-4 md:p-8">
         <div>
           <h1 className="mb-6 max-w-4xl text-6xl font-black leading-[1.1] text-pearl md:text-8xl">
-            The Pros Train with <span className="text-razza">Plates</span>
+            The Pros Train with <span className="text-razza italic">Plates</span>
           </h1>
           <p className="max-w-xl text-obsidian md:text-lg bg-electric">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto

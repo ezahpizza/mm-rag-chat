@@ -5,10 +5,13 @@ import { DocumentUpload } from '@/components/compare/DocumentUpload';
 import { GenZAnalysisResult } from '@/lib/analyzeGenZ';
 import { TextParallaxContent } from '@/components/genZAnalyze/TextParallaxContent';
 import { DragCloseDrawer } from '@/components/genZAnalyze/DragCloseDrawer';
-import { Spinner } from '@/components/spinner';
-import PixelBlast from '@/components/chat/PixelBlast';
+import { DocumentAnalysisLoader } from '@/components/global/SpringModal';
+import PixelBlast from '@/components/global/PixelBlast';
 import { items } from '@/constants/home-items';
 import { CardNav } from '@/components/global/CardNav';
+import { FiInfo } from 'react-icons/fi';
+import { SiPopos } from "react-icons/si";
+
 
 export default function GenZAnalyzePage() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -120,14 +123,11 @@ export default function GenZAnalyzePage() {
         )}
 
         {/* Loading State */}
-        {isAnalyzing && (
-          <div className="flex items-center justify-center py-12 text-pearl">
-            <div className="text-center">
-              <Spinner size={48} />
-              <p className="mt-4">Analyzing your document with Gen-Z vibes...</p>
-            </div>
-          </div>
-        )}
+        <DocumentAnalysisLoader
+          isOpen={isAnalyzing}
+          title="Analyzing Document"
+          description="Analyzing your document with Gen-Z vibes..."
+        />
 
         {/* Results */}
         {analysisResults.length > 0 && !isAnalyzing && (
@@ -146,8 +146,13 @@ export default function GenZAnalyzePage() {
 
         {/* Empty State */}
         {!uploadedFile && !isAnalyzing && analysisResults.length === 0 && (
-          <div className="bg-persian mt-8 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-pearl mb-3">
+          <div className="bg-gradient-to-br from-razza to-persian text-pearl p-6 rounded-lg w-full shadow-xl cursor-default relative overflow-hidden">
+            <FiInfo className="text-pearl/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24" />
+            <div className="relative z-10">
+              <div className="bg-pearl w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
+                <SiPopos />
+              </div>
+              <h3 className="text-lg font-medium text-pearl mb-3">
                 How to Use Document Comparison
                 </h3>
                 <ul className="text-skye space-y-2">
@@ -168,7 +173,9 @@ export default function GenZAnalyzePage() {
                         Review the results with risk assessments and use filters to focus on specific areas.
                     </li>
                 </ul>
+
             </div>
+          </div>
         )}
       </div>
 

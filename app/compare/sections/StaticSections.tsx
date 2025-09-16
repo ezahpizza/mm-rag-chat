@@ -1,5 +1,7 @@
 import React from 'react';
 import { ErrorDisplayProps } from '@/components/compare/types';
+import { FiInfo } from 'react-icons/fi';
+import { MdCompare } from "react-icons/md";
 
 export const PageHeader = () => (
   <div className="m-8 mt-24">
@@ -22,42 +24,35 @@ export const ErrorDisplay = ({ error }: ErrorDisplayProps) => (
   </div>
 );
 
-export const ProgressDisplay = () => (
-  <div className="mt-4 p-4 bg-ocean rounded-md">
-    <div className="flex items-center">
-      <div className="w-5 h-5 border-2 border-obsidian border-t-transparent rounded-full animate-spin mr-3" />
-      <div>
-        <p className="text-pearl font-medium">Processing your documents...</p>
-        <p className="text-obsidian text-sm">
-          This may take a few moments as we parse, index, and analyze your documents.
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
 export const HelpSection = () => (
-  <div className="bg-pearl mt-8 rounded-lg p-6">
-    <h3 className="text-lg font-medium text-cerulean mb-3">
-      How to Use Document Comparison
-    </h3>
-    <ul className="text-obsidian space-y-2">
-      <li className="flex items-start">
-        <span className="mr-2">1.</span>
-        Upload two PDF documents using the upload areas above.
-      </li>
-      <li className="flex items-start">
-        <span className="mr-2">2.</span>
-        Preview your documents to ensure they uploaded correctly.
-      </li>
-      <li className="flex items-start">
-        <span className="mr-2">3.</span>
-        Click &ldquo;Compare Documents&rdquo; to automatically parse, index, and analyze differences.
-      </li>
-      <li className="flex items-start">
-        <span className="mr-2">4.</span>
-        Review the results with risk assessments and use filters to focus on specific areas.
-      </li>
-    </ul>
-  </div>
+  <div className="bg-gradient-to-br from-obsidian to-persian text-pearl p-6 rounded-lg w-full shadow-xl cursor-default relative overflow-hidden  mt-8">
+              <FiInfo className="text-pearl/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24" />
+              <div className="relative z-10">
+                <div className="bg-pearl w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
+                  <MdCompare />
+                </div>
+                <h3 className="text-lg font-medium text-pearl mb-3">
+                  How to Use Document Comparison
+                  </h3>
+                  <ul className="text-skye space-y-2">
+                      <li className="flex items-start">
+                          <span className="mr-2">1.</span>
+                          Upload two PDF documents using the upload areas above.
+                      </li>
+                      <li className="flex items-start">
+                          <span className="mr-2">2.</span>
+                          Preview your documents to ensure they uploaded correctly.
+                      </li>
+                      <li className="flex items-start">
+                          <span className="mr-2">3.</span>
+                          Click &ldquo;Compare Documents&rdquo; to automatically parse, index, and analyze differences.
+                      </li>
+                      <li className="flex items-start">
+                          <span className="mr-2">4.</span>
+                          Review the results with risk assessments and use filters to focus on specific areas.
+                      </li>
+                  </ul>
+
+              </div>
+            </div>
 );

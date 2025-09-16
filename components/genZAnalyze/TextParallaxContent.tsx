@@ -1,50 +1,12 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
+import { gifMap } from "@/constants/gifMap";
 
 const IMG_PADDING = 12;
 
-// Static GIF mapping for categories
-const gifMap = {
-  "Obligations & Responsibilities": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Liabilities & Risks": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Financial Commitments": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Rights & Benefits": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Termination & Exit Conditions": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Loopholes & Grey Areas": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ],
-  "Privacy & Data Use": [
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jJTg7z6YJG0/giphy.gif",
-    "https://media.giphy.com/media/3o7TKz9bX9Z9Z9Z9Z9/giphy.gif"
-  ]
-};
-
 const getRandomGif = (category: string): string => {
-  const gifs = gifMap[category as keyof typeof gifMap] || gifMap["Obligations & Responsibilities"];
+  const gifs = gifMap[category as keyof typeof gifMap];
   return gifs[Math.floor(Math.random() * gifs.length)];
 };
 
