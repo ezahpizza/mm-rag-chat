@@ -140,7 +140,7 @@ export const CardNav = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} bg-ocean block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
+        className={`card-nav ${isExpanded ? 'open' : ''} bg-gradient-to-r from-pearl to-cerulean block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
@@ -171,7 +171,7 @@ export const CardNav = ({
             <SignUpButton mode="modal">
               <button
                 type="button"
-                className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full bg-cerulean hover:bg-razza text-razza hover:text-cerulean font-semibold cursor-pointer transition-colors duration-300 items-center justify-center"
+                className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 h-full bg-razza hover:bg-obsidian text-persian hover:text-razza font-semibold cursor-pointer transition-colors duration-300 items-center justify-center"
               >
                 Get Started
               </button>
@@ -203,7 +203,7 @@ export const CardNav = ({
                   <Link
                     key={`${lnk.label}-${i}`}
                     href={lnk.href}
-                    className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:opacity-75 text-[15px] md:text-[16px]"
+                    className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:text-razza text-pearl text-md md:text-lg"
                     aria-label={lnk.ariaLabel}
                   >
                     <GoArrowUpRight className="nav-card-link-icon shrink-0" aria-hidden="true" />

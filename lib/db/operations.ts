@@ -153,3 +153,31 @@ export async function getUserComparisonReport(
     fullReport: report.report,
   };
 }
+
+/**
+ * Deletes a chat summary for a user
+ */
+export async function deleteUserChatSummary(
+  userId: string,
+  chatId: string
+): Promise<{ success: boolean }> {
+  await connectDB();
+
+  const result = await ChatSummary.findOneAndDelete({ chatId, userId });
+
+  return { success: !!result };
+}
+
+/**
+ * Deletes a comparison report for a user
+ */
+export async function deleteUserComparisonReport(
+  userId: string,
+  reportId: string
+): Promise<{ success: boolean }> {
+  await connectDB();
+
+  const result = await ComparisonReport.findOneAndDelete({ reportId, userId });
+
+  return { success: !!result };
+}

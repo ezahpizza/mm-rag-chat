@@ -1,6 +1,6 @@
 export const items = [
   {
-      label: "Explore", 
+      label: "Cool Stuff", 
       bgColor: "#122c4f",
       textColor: "#fff",
       links: [
@@ -11,11 +11,11 @@ export const items = [
       ]
     },
     {
-      label: "About",
+      label: "Meh Stuff",
       bgColor: "#0b1215",
       textColor: "#fff",
       links: [
-        { label: "Company", href: "#", ariaLabel: "About Company" },
+        { label: "Your Account", href: "/dashboard", ariaLabel: "User Account" },
         { label: "Careers", href: "#", ariaLabel: "About Careers" }
       ]
     }

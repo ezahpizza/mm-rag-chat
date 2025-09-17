@@ -234,7 +234,7 @@ export const exportSavedReportToPDF = async (reportId: string): Promise<void> =>
     exportComparisonReportToPDF(report, docNames);
     
   } catch (error) {
-    console.error('❌ Error exporting saved report to PDF:', error);
+    console.error('Error exporting saved report to PDF:', error);
     throw new Error('Failed to export saved report to PDF');
   }
 };

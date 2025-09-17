@@ -337,8 +337,8 @@ packages:
     resolution: {integrity: sha512-Hrfm5/Nr1ZL+Jg3oRL9FEaFIt+AYO82znd78CBeeKdlYxNKHbihA2xydLmaoj08SX6cmfbf7snnJN6DW3UCqEQ==}
     engines: {node: '>=18.17.0'}
 
-  '@clerk/types@4.85.0':
-    resolution: {integrity: sha512-0s7KZbWpX4e9/CHl29sYGGBUBbZa7qlXp74OaaXfm1WTzYGiOOTyyE54j2WTz91+TZxIZZu5UA5rfn9qc79hYA==}
+  '@clerk/types@4.86.0':
+    resolution: {integrity: sha512-YFaOYIAZWbpXehAmtgUB0YNf1v5b/hlwePvdqxlD5vdwrNsap28RpupWZat0hp1+PTtb9uAwSa5AFCOxkYLUJQ==}
     engines: {node: '>=18.17.0'}
 
   '@date-fns/tz@1.4.1':
@@ -4076,7 +4076,7 @@ snapshots:
   '@clerk/backend@2.13.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/shared': 3.24.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/types': 4.85.0
+      '@clerk/types': 4.86.0
       cookie: 1.0.2
       standardwebhooks: 1.0.0
       tslib: 2.8.1
@@ -4087,7 +4087,7 @@ snapshots:
   '@clerk/clerk-react@5.46.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/shared': 3.24.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/types': 4.85.0
+      '@clerk/types': 4.86.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       tslib: 2.8.1
@@ -4097,7 +4097,7 @@ snapshots:
       '@clerk/backend': 2.13.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@clerk/clerk-react': 5.46.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@clerk/shared': 3.24.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/types': 4.85.0
+      '@clerk/types': 4.86.0
       next: 15.5.3(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
@@ -4106,7 +4106,7 @@ snapshots:
 
   '@clerk/shared@3.24.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@clerk/types': 4.85.0
+      '@clerk/types': 4.86.0
       dequal: 2.0.3
       glob-to-regexp: 0.4.1
       js-cookie: 3.0.5
@@ -4118,10 +4118,10 @@ snapshots:
 
   '@clerk/themes@2.4.18':
     dependencies:
-      '@clerk/types': 4.85.0
+      '@clerk/types': 4.86.0
       tslib: 2.8.1
 
-  '@clerk/types@4.85.0':
+  '@clerk/types@4.86.0':
     dependencies:
       csstype: 3.1.3
 
