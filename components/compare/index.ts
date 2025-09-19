@@ -2,8 +2,7 @@
 export { ComparisonTable } from './ComparisonTable';
 export { SummaryPanel } from './SummaryPanel';
 export { FilterControls } from './FilterControls';
-export { DocumentUpload } from './DocumentUpload';
-export {  PDFPreview } from './PDFPreview';
+export { PDFPreview } from './PDFPreview';
 
 // Types and interfaces
 export * from './types';

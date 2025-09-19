@@ -4,9 +4,9 @@ import { FiInfo } from 'react-icons/fi';
 import { MdCompare } from "react-icons/md";
 
 export const PageHeader = () => (
-  <div className="m-8 mt-24">
+  <div className="m-8 mt-48">
     <h1 className="text-3xl font-bold text-pearl mb-2">
-      Document Comparison
+      Diffex
     </h1>
     <p className="text-ocean">
       Upload two legal documents to automatically identify differences, risks, and key variations in clauses.

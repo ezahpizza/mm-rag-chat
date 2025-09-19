@@ -1,12 +1,29 @@
-import { Hero } from "@/components/home/Hero";
-import { CardNav } from "@/components/global/CardNav";
-import PixelBlast from '@/components/global/PixelBlast';
+"use client";
+
+import { useEffect, useState } from "react";
+import { Hero, CollapseCardFeatures, ContactCard, PingIcon, Footer } from "@/components/home";
+import { CardNav, PixelBlast, Loader } from "@/components/global";
 import { items } from "@/constants/home-items";
 
 export default function HomePage() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2000); // 2 second delay for loading screen
+
+        return () => clearTimeout(timer);
+    }, []);
+
+     if (loading) {
+        return( <Loader /> );
+    }
+  
+
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-obsidian">
-      <div className="absolute inset-0 z-0">
+    <main className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden bg-obsidian">
+      <div className="fixed inset-0 w-full h-full z-0">
         <PixelBlast
           variant="circle"
           pixelSize={6}
@@ -28,18 +45,41 @@ export default function HomePage() {
         />
       </div>
 
-      <div className="flex-1 scrollbar-hide relative z-10 items-center w-7xl">
-      <CardNav
-      logo="/logo.svg"
-      logoAlt="Company Logo"
-      items={items}
-      menuColor="#000"
-      ease="power3.out"
-    />
+      <div className="flex-1 scrollbar-hide relative z-10 items-center w-full container-responsive">
+        <CardNav
+          logo="/logo-b.svg"
+          logoAlt="Company Logo"
+          items={items}
+          menuColor="#000"
+          ease="power3.out"
+        />
 
-      <Hero />
-    </div>
-      
+        {/* Mobile layout: PingIcon centered, then Hero below */}
+        <div className="md:hidden flex flex-col h-screen">
+          <div className="flex-1 flex items-center justify-center mt-64">
+            <PingIcon />
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+            <Hero />
+          </div>
+        </div>
+
+        {/* Desktop layout: Just Hero */}
+        <div className="hidden md:block">
+          <Hero />
+        </div>
+
+      </div>
+
+      <div className="z-20">
+        <CollapseCardFeatures />
+        <div className="hidden md:block">
+          <PingIcon />
+        </div>
+        <ContactCard />
+      </div>
+
+      <Footer />
     </main>
   );
 }

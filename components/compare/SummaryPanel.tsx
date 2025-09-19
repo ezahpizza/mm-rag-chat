@@ -24,38 +24,38 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
   ];
 
   return (
-    <div className="mt-8 bg-pearl rounded-lg shadow-md overflow-hidden">
+    <div className="mt-6 sm:mt-8 bg-pearl rounded-lg shadow-md overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-electric to-persian px-6 py-4">
-        <h2 className="text-xl font-bold text-pearl">
+      <div className="bg-gradient-to-r from-electric to-persian px-4 sm:px-6 py-3 sm:py-4">
+        <h2 className="text-lg sm:text-xl font-bold text-pearl">
           Comparison Summary
         </h2>
-        <p className="text-blue-100 text-sm mt-1">
+        <p className="text-blue-100 text-xs sm:text-sm mt-1">
           Executive overview of document differences and risk assessment
         </p>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 text-obsidian text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6 text-obsidian text-xs sm:text-sm">
           {/* Documents Info */}
-          <div className="bg-skye rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-cerulean mb-3">Documents Analyzed</h3>
+          <div className="bg-skye rounded-lg p-3 sm:p-4">
+            <h3 className="text-sm font-semibold text-cerulean mb-2 sm:mb-3">Documents Analyzed</h3>
             <div className="space-y-2">
-              <div className="flex items-center justify-between ">
-                <span> First Document:</span>
-                <span className="font-medium truncate ml-2" title={metadata.docA.id}>
+              <div className="flex items-center justify-between">
+                <span>First Document:</span>
+                <span className="font-medium truncate ml-2 max-w-[120px] sm:max-w-none" title={metadata.docA.id}>
                   {metadata.docA.id}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Second Document:</span>
-                <span className="truncate ml-2" title={metadata.docB.id}>
+                <span className="truncate ml-2 max-w-[120px] sm:max-w-none" title={metadata.docB.id}>
                   {metadata.docB.id}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-2 border-t border-gray-200">
-                <span >Comparisons:</span>
+                <span>Comparisons:</span>
                 <span className="font-medium">
                   {metadata.alignment_stats.total_alignments}
                 </span>
@@ -64,17 +64,17 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
           </div>
 
           {/* Risk Distribution */}
-          <div className="bg-electric rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-pearl mb-3">Risk Distribution</h3>
-            <div className="space-y-3">
+          <div className="bg-electric rounded-lg p-3 sm:p-4">
+            <h3 className="text-sm font-semibold text-pearl mb-2 sm:mb-3">Risk Distribution</h3>
+            <div className="space-y-2 sm:space-y-3">
               {riskDistribution.map((risk) => (
                 <div key={risk.level} className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full ${risk.color} mr-2`}></div>
-                    <span className="text-sm text-obsidian font-medium">{risk.level} Risk</span>
+                    <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${risk.color} mr-2`}></div>
+                    <span className="text-xs sm:text-sm text-obsidian font-medium">{risk.level} Risk</span>
                   </div>
                   <div className="flex items-center">
-                    <span className={`text-sm font-medium ${risk.textColor}`}>
+                    <span className={`text-xs sm:text-sm font-medium ${risk.textColor}`}>
                       {risk.count}
                     </span>
                     {totalRiskItems > 0 && (
@@ -89,9 +89,9 @@ export function SummaryPanel({ summary, metadata }: SummaryPanelProps) {
           </div>
 
           {/* Quick Stats */}
-          <div className="bg-persian rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-skye mb-3">Analysis Stats</h3>
-            <div className="space-y-2 text-pearl text-sm">
+          <div className="bg-persian rounded-lg p-3 sm:p-4">
+            <h3 className="text-sm font-semibold text-skye mb-2 sm:mb-3">Analysis Stats</h3>
+            <div className="space-y-2 text-pearl text-xs sm:text-sm">
               <div className="flex items-center justify-between">
                 <span>Doc A Clauses:</span>
                 <span className="font-medium text-skye">

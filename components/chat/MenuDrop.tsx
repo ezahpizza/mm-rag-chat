@@ -8,6 +8,8 @@ import { useState } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { wrapperVariants, itemVariants, actionIconVariants, iconVariants } from "./dropVariants";
+import { SiPopos } from "react-icons/si";
+
 
 const MenuDrop = () => {
   const [open, setOpen] = useState(false);
@@ -39,6 +41,7 @@ const MenuDrop = () => {
         >
           <Option setOpen={setOpen} Icon={FiHome} text="Home" />
           <Option setOpen={setOpen} Icon={MdCompare} text="Compare" />
+          <Option setOpen={setOpen} Icon={SiPopos} text="Analyse" />
         </motion.ul>
       </motion.div>
     </motion.div>
@@ -58,7 +61,16 @@ const Option = ({ text, Icon, setOpen }: MenuProps) => {
       variants={itemVariants}
       onClick={() => {
         setOpen(false);
-        const route = text.toLowerCase() === 'home' ? '/' : `/${text.toLowerCase()}`;
+        let route;
+        if (text.toLowerCase() === 'home') {
+          route = '/';
+        } else if (text.toLowerCase() === 'compare') {
+          route = '/compare';
+        } else if (text.toLowerCase() === 'analyse') {
+          route = '/genzanalyze';
+        } else {
+          route = '/';
+        }
         router.push(route);
       }}
       className="flex items-center gap-2 w-full p-2 text-md font-medium whitespace-nowrap rounded-md hover:bg-electric text-cerulean hover:text-pearl transition-colors cursor-pointer"

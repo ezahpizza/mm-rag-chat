@@ -68,14 +68,14 @@ export default function ChatInput({
     setFiles(files.filter((_, i) => i !== index));
   };
   return (
-    <div className="bg-ocean rounded-xl py-2 pb-10 px-2 m-3 relative min-h-20">
-      <fieldset className="grid p-2 sm:grid-flow-col sm:grid-cols-[minmax(0,_1fr)_auto] sm:gap-2 w-full rounded-3xl backdrop-blur-xl disabled:bg-white/50">
+    <div className="bg-ocean rounded-lg sm:rounded-xl py-2 pb-6 sm:pb-10 px-2 sm:px-2 m-1 sm:m-3 relative min-h-16 sm:min-h-20">
+      <fieldset className="grid p-2 sm:grid-flow-col sm:grid-cols-[minmax(0,_1fr)_auto] sm:gap-2 w-full rounded-2xl sm:rounded-3xl backdrop-blur-xl disabled:bg-white/50">
         <form
           onSubmit={handleSubmit}
         >
           <textarea
             ref={textareaRef}
-            className="p-1.5 resize-auto focus:outline-none w-full h-auto text-md text-obsidian placeholder:text-obsidian"
+            className="p-1.5 resize-none focus:outline-none w-full h-auto text-sm sm:text-base text-obsidian placeholder:text-obsidian min-h-[40px]"
             value={input}
             placeholder="How can I help you today?"
             onChange={handleTextareaChange}
@@ -91,13 +91,13 @@ export default function ChatInput({
         </form>
       </fieldset>
       <div>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-2 sm:gap-4">
           {files.map((file, index) => (
             <div
               key={index}
-              className="mt-4 w-40 relative cursor-pointer rounded-md flex shadow text-md bg-pearl"
+              className="mt-2 sm:mt-4 w-32 sm:w-40 relative cursor-pointer rounded-md flex shadow text-sm sm:text-base bg-pearl"
             >
-              <button className="absolute inset-0 cursor-pointer hover:bg-black/5 w-40"></button>
+              <button className="absolute inset-0 cursor-pointer hover:bg-black/5 w-32 sm:w-40"></button>
               <div className="flex-shrink-0 w-12 h-12 bg-cerulean rounded-tl-md rounded-bl-md grid place-items-center text-white font-medium uppercase truncate">
                 {file.name.split(".")[1]?.toUpperCase() || 'FILE'}
               </div>
@@ -119,7 +119,7 @@ export default function ChatInput({
           ))}
         </div>
       </div>
-      <div className="flex justify-end items-end absolute right-0 bottom-0 p-4">
+      <div className="flex justify-end items-end absolute right-0 bottom-0 p-2 sm:p-4">
         <UploadButton
           disabled={isLoading || isRecording || uploading}
           uploading={uploading}
@@ -131,25 +131,25 @@ export default function ChatInput({
           buttonIcon={Settings}
           options={modeOptions}
           selectedValue={selectedMode}
-          buttonClassName='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
+          buttonClassName='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-xs sm:text-sm text-center mx-1 w-8 h-8 sm:w-9 sm:h-9'
         />
         <Button
           type="button"
           onClick={onMicClick}
-          className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9'
+          className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-xs sm:text-sm text-center mx-1 w-8 h-8 sm:w-9 sm:h-9'
         >
-          <div className="grid place-items-center w-5 h-5">
-            <Mic size={18} />
+          <div className="grid place-items-center w-4 h-4 sm:w-5 sm:h-5">
+            <Mic size={16} className="sm:w-[18px] sm:h-[18px]" />
           </div>
         </Button>
         <Button
           type="submit"
           onClick={handleSubmit}
           disabled={isLoading || !input.trim() || isRecording}
-          className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9 focus:outline-none'
+          className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-xs sm:text-sm text-center mx-1 w-8 h-8 sm:w-9 sm:h-9 focus:outline-none'
         >
-          <div className="grid place-items-center w-5 h-5">
-            <Send size={18} />
+          <div className="grid place-items-center w-4 h-4 sm:w-5 sm:h-5">
+            <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
           </div>
         </Button>
       </div>
@@ -194,7 +194,7 @@ function UploadButton({
     <Button
       type="button"
       onClick={onClick}
-      className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-sm text-center mx-1 w-9 h-9 focus:outline-none'
+      className='flex items-center bg-pearl hover:bg-razza py-1 px-2 rounded-full cursor-pointer shadow transition-all ease-in-out active:scale-[0.98] text-ellipsis whitespace-nowrap overflow-x-hidden text-xs sm:text-sm text-center mx-1 w-8 h-8 sm:w-9 sm:h-9 focus:outline-none'
     >
       <input
         ref={fileInputRef}
@@ -204,8 +204,8 @@ function UploadButton({
         onChange={onChange}
         className="opacity-0 absolute inset-0 rounded-xl -z-10 overflow-hidden"
       />
-      <div className="grid place-items-center w-5 h-5">
-        {uploading ? <Spinner size={18} /> : <Paperclip size={18} />}
+      <div className="grid place-items-center w-4 h-4 sm:w-5 sm:h-5">
+        {uploading ? <Spinner size={16} className="sm:w-[18px] sm:h-[18px]" /> : <Paperclip size={16} className="sm:w-[18px] sm:h-[18px]" />}
       </div>
     </Button>
   );

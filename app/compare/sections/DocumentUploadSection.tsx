@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {  DocumentUpload } from '@/components/compare';
+import {  DocumentUpload } from '@/components/global';
 import { DocumentUploadSectionProps } from '@/components/compare/types';
 
 export const DocumentUploadSection = ({
@@ -16,12 +16,12 @@ export const DocumentUploadSection = ({
   onPreviewA,
   onPreviewB,
 }: DocumentUploadSectionProps) => (
-  <div className="bg-pearl rounded-lg shadow-md p-6 mb-6">
-    <h2 className="text-xl font-semibold mb-6 text-gray-800">
+  <div className="bg-pearl rounded-lg shadow-md p-4 sm:p-6 mb-4 sm:mb-6">
+    <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-gray-800">
       Upload Your Documents
     </h2>
     
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
       <DocumentUpload
         label="Document A"
         onFileUpload={onFileUploadA}

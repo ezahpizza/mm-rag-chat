@@ -2,22 +2,33 @@
 
 import React, { useEffect, useState } from 'react';
 import { useChat, type Message } from 'ai/react';
+import { useUser } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import {
   ChatMessages,
   ChatInput,
   LoadingIndicator,
   ErrorDisplay,
-  useWebSocketAndRecording, PixelBlast
+  useWebSocketAndRecording
 } from '@/components/chat';
 import { NavSection } from '@/components/chat/NavSection';
+import { Loader,PixelBlast } from '@/components/global';
 
 export default function ChatPage() {
   const [uploading, setUploading] = useState(false);
   const [indexStatus, setIndexStatus] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState('Plain English');
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2000); // 2 second delay for loading screen
+  
+        return () => clearTimeout(timer);
+    }, []);
 
-  // Use AI SDK's useChat hook
+  // Use AI SDK's useChat hook - MUST be called before any conditional returns
   const {
     messages,
     input,
@@ -55,6 +66,14 @@ export default function ChatPage() {
 
   // Use the custom hook for WebSocket and recording
   const { currentTranscript, isRecording, handleMicClick } = useWebSocketAndRecording();
+
+  // Get user from Clerk
+  const { user } = useUser();
+
+  // Conditional early return after all hooks are called
+  if (loading) {
+    return( <Loader /> );
+  }
 
   const isNoMessages = messages.length === 0 && !isRecording;
 
@@ -96,7 +115,7 @@ export default function ChatPage() {
             {isNoMessages && (
               <div className="h-full flex items-center justify-center text-razza">
                 <h1 className="font-bold text-5xl pl-20">
-                  Welcome back <span className="animate-pulse">🦜</span>
+                  Welcome <span>{user?.firstName || 'User'}!</span>
                 </h1>
               </div>
             )}
@@ -128,7 +147,7 @@ export default function ChatPage() {
             }}
             transition={{ duration: 0.5, ease: 'easeInOut' }}
           >
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-4xl mx-auto">
               <ChatInput
                 input={input}
                 handleInputChange={handleInputChange}

@@ -19,34 +19,96 @@ export function ComparisonTable({ comparisons }: ComparisonTableProps) {
 
   if (comparisons.length === 0) {
     return (
-      <div className="bg-cerulean rounded-lg shadow-md p-8 text-center">
-        <p className="text-cerulean">No comparisons to display.</p>
+      <div className="bg-cerulean rounded-lg shadow-md p-6 sm:p-8 text-center">
+        <p className="text-cerulean text-sm sm:text-base">No comparisons to display.</p>
       </div>
     );
   }
 
   return (
     <div className="bg-pearl rounded-lg shadow-md overflow-hidden">
-      <div className="px-6 py-4 bg-gradient-to-r from-electric to-persian">
-        <h3 className="text-lg font-semibold text-pearl">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-electric to-persian">
+        <h3 className="text-base sm:text-lg font-semibold text-pearl">
           Document Comparison Results
         </h3>
-        <p className="text-sm text-skye mt-1">
+        <p className="text-xs sm:text-sm text-skye mt-1">
           Comparing documents • {comparisons.length} clause comparisons
         </p>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile Card Layout */}
+      <div className="block md:hidden">
+        <div className="divide-y divide-gray-200">
+          {comparisons.map((comparison, index) => (
+            <div key={index} className="p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-medium text-gray-900 truncate">
+                    {comparison.clause || 'General Clause'}
+                  </h4>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {comparison.category}
+                  </p>
+                </div>
+                <div className="flex items-center ml-2">
+                  {getRiskIcon(comparison.risk_level)}
+                  <span className={`ml-1 px-2 py-1 text-xs font-medium rounded-full ${getRiskLevelColor(comparison.risk_level)}`}>
+                    {comparison.risk_level}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <div>
+                  <p className="text-xs font-medium text-gray-700">Difference Summary:</p>
+                  <p className="text-xs text-gray-600">{comparison.difference_summary}</p>
+                </div>
+                
+                <button
+                  onClick={() => toggleRowExpansion(index)}
+                  className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  {expandedRows.has(index) ? 'Show Less' : 'Show Details'}
+                </button>
+                
+                {expandedRows.has(index) && (
+                  <div className="mt-3 pt-3 border-t border-gray-200 space-y-2">
+                    <div>
+                      <p className="text-xs font-medium text-gray-700">Document A:</p>
+                      <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                        {comparison.docA_text}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-gray-700">Document B:</p>
+                      <p className="text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                        {comparison.docB_text}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-gray-700">Impact Analysis:</p>
+                      <p className="text-xs text-gray-600">{comparison.impact}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Table Layout */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-ocean">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
+              <th className="px-4 lg:px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
                 Clause
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
+              <th className="px-4 lg:px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
                 Category
               </th>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
+              <th className="px-4 lg:px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">
                 Difference Summary
               </th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-cerulean uppercase tracking-wider">

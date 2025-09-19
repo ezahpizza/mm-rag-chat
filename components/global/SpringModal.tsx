@@ -1,13 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { HiDocumentArrowUp } from "react-icons/hi2";
 
-interface DocumentAnalysisLoaderProps {
+interface SpringModalProps {
   isOpen: boolean;
   title: string;
   description: string;
 }
 
-export const DocumentAnalysisLoader = ({ isOpen, title, description }: DocumentAnalysisLoaderProps) => {
+export const SpringModal = ({ isOpen, title, description }: SpringModalProps) => {
   return (
     <AnimatePresence>
       {isOpen && (

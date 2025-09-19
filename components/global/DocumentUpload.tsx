@@ -4,14 +4,14 @@ import React, { useRef, useState } from 'react';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 import { Upload, FileText, X, Eye } from 'lucide-react';
-import { DocumentUploadProps, UploadZoneProps, FileDisplayProps, FileInfoProps, FileActionsProps } from './types';
-import { formatFileSize, validateDroppedFiles } from './helpers';
+import { DocumentUploadProps, UploadZoneProps, FileDisplayProps, FileInfoProps, FileActionsProps } from '@/components/compare/types';
+import { formatFileSize, validateDroppedFiles } from '@/components/compare/helpers';
 
 // Subcomponents for better organization
 const UploadZone = ({ onDrop, onDragOver, onDragLeave, onClick, dragOver, disabled, isUploading }: UploadZoneProps) => (
   <div
     className={`
-      border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all border-cerulean
+      border-2 border-dashed rounded-lg p-4 sm:p-8 text-center cursor-pointer transition-all border-cerulean
       ${dragOver ? 'bg-ocean' : 'hover:border-gray-400'}
       ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-ocean/20'}
     `}
@@ -36,14 +36,14 @@ const UploadingState = () => (
 );
 
 const IdleState = () => (
-  <div className="flex flex-col items-center space-y-3">
-    <Upload size={32} className="text-gray-400" />
+  <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+    <Upload size={24} className="sm:w-8 sm:h-8 text-gray-400" />
     <div>
-      <p className="text-gray-600 mb-1">
+      <p className="text-gray-600 mb-1 text-sm sm:text-base">
         Drag and drop your PDF here, or{' '}
         <span className="text-blue-600 font-medium">click to browse</span>
       </p>
-      <p className="text-sm text-gray-500">
+      <p className="text-xs sm:text-sm text-gray-500">
         Only PDF files are supported
       </p>
     </div>

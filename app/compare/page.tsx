@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PDFPreview } from '@/components/compare';
 import { 
   useComparePageState,
@@ -16,9 +16,8 @@ import {
   shouldShowHelp
 } from '@/components/compare/controllers';
 
-import PixelBlast from '@/components/global/PixelBlast';
-import { CardNav } from '@/components/global/CardNav';
-import { DocumentAnalysisLoader } from '@/components/global/SpringModal';
+import { PixelBlast, CardNav, SpringModal, Loader } from '@/components/global';
+
 import { items } from '@/constants/home-items';
 import { DocumentUploadSection, 
         ActionButtons, 
@@ -55,6 +54,21 @@ export default function ComparePage() {
     setRiskFilter,
     setCategoryFilter,
   } = useComparePageState();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+          const timer = setTimeout(() => {
+              setLoading(false);
+          }, 2000); // 2 second delay for loading screen
+    
+          return () => clearTimeout(timer);
+      }, []);
+    
+        if (loading) {
+          return( <Loader /> );
+      }
+  
 
   // Event handlers using controller factories
   const handleFileUploadA = createFileUploadHandler(setDocAFile, setError);
@@ -135,9 +149,9 @@ export default function ComparePage() {
       />
       </div>
             
-      <div className="flex-1 scrollbar-hide p-4 relative z-10 items-center w-7xl">
+      <div className="flex-1 scrollbar-hide p-2 sm:p-4 relative z-10 items-center w-full container-responsive">
       <CardNav
-          logo="/logo.svg"
+          logo="/logo-b.svg"
           logoAlt="Company Logo"
           items={items}
           menuColor="#000"
@@ -173,7 +187,7 @@ export default function ComparePage() {
       />
 
       {error && <ErrorDisplay error={error} />}
-      <DocumentAnalysisLoader
+      <SpringModal
         isOpen={isComparing}
         title="Processing Documents"
         description="This may take a few moments as we parse, index, and analyze your documents."

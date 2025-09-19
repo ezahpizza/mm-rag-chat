@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import { DocumentUpload } from '@/components/compare/DocumentUpload';
+import React, { useEffect, useState } from 'react';
 import { GenZAnalysisResult } from '@/lib/analyzeGenZ';
-import { TextParallaxContent } from '@/components/genZAnalyze/TextParallaxContent';
-import { DragCloseDrawer } from '@/components/genZAnalyze/DragCloseDrawer';
-import { DocumentAnalysisLoader } from '@/components/global/SpringModal';
-import PixelBlast from '@/components/global/PixelBlast';
+import { TextParallaxContent, DragCloseDrawer } from '@/components/genZAnalyze';
+
+import { SpringModal, PixelBlast, CardNav, Loader, DocumentUpload } from '@/components/global';
 import { items } from '@/constants/home-items';
-import { CardNav } from '@/components/global/CardNav';
 import { FiInfo } from 'react-icons/fi';
 import { SiPopos } from "react-icons/si";
 
@@ -20,6 +17,20 @@ export default function GenZAnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedResult, setSelectedResult] = useState<GenZAnalysisResult | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+      const timer = setTimeout(() => {
+          setLoading(false);
+      }, 2000); // 2 second delay for loading screen
+
+      return () => clearTimeout(timer);
+  }, []);
+
+    if (loading) {
+      return( <Loader /> );
+  }
 
   const handleFileUpload = async (file: File) => {
     setIsAnalyzing(true);
@@ -91,19 +102,26 @@ export default function GenZAnalyzePage() {
         />
       </div>
 
-      <div className="flex-1 scrollbar-hide p-4 relative z-10 items-center w-7xl">
+      <div className="flex-1 scrollbar-hide p-2 sm:p-4 relative z-10 items-center w-full container-responsive">
         <CardNav
-          logo="/logo.svg"
+          logo="/logo-b.svg"
           logoAlt="Company Logo"
           items={items}
           menuColor="#000"
           ease="power3.out"
         />
 
-
+        <div className="m-8 mt-48">
+          <h1 className="text-3xl font-bold text-pearl mb-2">
+            PopLegal
+          </h1>
+          <p className="text-ocean">
+            Understand legal stuff like you would with anything else. Just upload your document and let us bring you the vibes.
+          </p>
+        </div>
 
         {/* Upload Section */}
-        <div className="mb-8 mt-32 bg-pearl p-4 rounded-lg">
+        <div className="mb-6 sm:mb-8 bg-pearl p-3 sm:p-4 rounded-lg">
           <DocumentUpload
             label="Upload Your Document"
             onFileUpload={handleFileUpload}
@@ -116,14 +134,14 @@ export default function GenZAnalyzePage() {
 
         {/* Error Display */}
         {error && (
-          <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 font-medium">Analysis Error</p>
-            <p className="text-red-600">{error}</p>
+          <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-800 font-medium text-sm sm:text-base">Analysis Error</p>
+            <p className="text-red-600 text-sm sm:text-base">{error}</p>
           </div>
         )}
 
         {/* Loading State */}
-        <DocumentAnalysisLoader
+        <SpringModal
           isOpen={isAnalyzing}
           title="Analyzing Document"
           description="Analyzing your document with Gen-Z vibes..."
@@ -131,7 +149,7 @@ export default function GenZAnalyzePage() {
 
         {/* Results */}
         {analysisResults.length > 0 && !isAnalyzing && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {analysisResults.map((result, index) => (
               <TextParallaxContent
                 key={result.category}
@@ -146,34 +164,33 @@ export default function GenZAnalyzePage() {
 
         {/* Empty State */}
         {!uploadedFile && !isAnalyzing && analysisResults.length === 0 && (
-          <div className="bg-gradient-to-br from-razza to-persian text-pearl p-6 rounded-lg w-full shadow-xl cursor-default relative overflow-hidden">
-            <FiInfo className="text-pearl/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24" />
-            <div className="relative z-10">
-              <div className="bg-pearl w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
+          <div className="bg-gradient-to-br from-razza to-persian text-pearl p-4 sm:p-6 rounded-lg w-full shadow-xl cursor-default relative overflow-hidden">
+            <FiInfo className="text-pearl/10 rotate-12 text-[150px] sm:text-[200px] lg:text-[250px] absolute z-0 -top-12 sm:-top-16 lg:-top-24 -left-12 sm:-left-16 lg:-left-24" />
+            <div className="relative z-10 text-center">
+              <div className="bg-pearl w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 mb-2 sm:mb-3 rounded-full text-xl sm:text-2xl lg:text-3xl text-indigo-600 grid place-items-center mx-auto">
                 <SiPopos />
               </div>
-              <h3 className="text-lg font-medium text-pearl mb-3">
-                How to Use Document Comparison
-                </h3>
-                <ul className="text-skye space-y-2">
-                    <li className="flex items-start">
-                        <span className="mr-2">1.</span>
-                        Upload two PDF documents using the upload areas above.
-                    </li>
-                    <li className="flex items-start">
-                        <span className="mr-2">2.</span>
-                        Preview your documents to ensure they uploaded correctly.
-                    </li>
-                    <li className="flex items-start">
-                        <span className="mr-2">3.</span>
-                        Click &ldquo;Compare Documents&rdquo; to automatically parse, index, and analyze differences.
-                    </li>
-                    <li className="flex items-start">
-                        <span className="mr-2">4.</span>
-                        Review the results with risk assessments and use filters to focus on specific areas.
-                    </li>
-                </ul>
-
+              <h3 className="text-base sm:text-lg font-medium text-pearl mb-2 sm:mb-3">
+                How to Use Document Analysis
+              </h3>
+              <ul className="text-skye space-y-1 sm:space-y-2 text-sm sm:text-base">
+                <li className="flex items-start text-left">
+                  <span className="mr-2 flex-shrink-0">1.</span>
+                  <span>Upload a PDF document using the upload area above.</span>
+                </li>
+                <li className="flex items-start text-left">
+                  <span className="mr-2 flex-shrink-0">2.</span>
+                  <span>Wait for the AI to analyze your document with Gen-Z insights.</span>
+                </li>
+                <li className="flex items-start text-left">
+                  <span className="mr-2 flex-shrink-0">3.</span>
+                  <span>Explore the different categories and summaries provided.</span>
+                </li>
+                <li className="flex items-start text-left">
+                  <span className="mr-2 flex-shrink-0">4.</span>
+                  <span>Click &ldquo;Learn More&rdquo; for detailed breakdowns and insights.</span>
+                </li>
+              </ul>
             </div>
           </div>
         )}

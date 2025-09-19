@@ -9,8 +9,7 @@ import {
   ChatSummariesSection,
   ComparisonReportsSection
 } from '@/components/dashboard';
-import PixelBlast from '@/components/global/PixelBlast';
-import { CardNav } from '@/components/global/CardNav';
+import { PixelBlast, CardNav, Loader } from '@/components/global';
 import { items } from '@/constants/home-items';
 
 interface ChatSummary {
@@ -114,34 +113,7 @@ export default function DashboardPage() {
   };
 
   if (loading) {
-    return (
-      <main className="flex flex-col items-center justify-center min-h-screen overflow-hidden bg-obsidian">
-        <div className="absolute inset-0 z-0">
-          <PixelBlast
-            variant="circle"
-            pixelSize={6}
-            color="#8b67ff"
-            patternScale={3}
-            patternDensity={1.6}
-            pixelSizeJitter={0.5}
-            enableRipples
-            rippleSpeed={0.4}
-            rippleThickness={0.12}
-            rippleIntensityScale={1.5}
-            liquid
-            liquidStrength={0.12}
-            liquidRadius={1.2}
-            liquidWobbleSpeed={5}
-            speed={0.6}
-            edgeFade={0.25}
-            transparent
-          />
-        </div>
-        <div className="flex-1 scrollbar-hide p-4 relative z-10 w-7xl flex items-center justify-center">
-          <div className="text-pearl">Loading dashboard...</div>
-        </div>
-      </main>
-    );
+    return( <Loader /> );
   }
 
   return (
@@ -168,26 +140,26 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="flex-1 scrollbar-hide p-4 relative z-10 w-7xl">
+      <div className="flex-1 scrollbar-hide p-2 sm:p-4 relative z-10 w-full container-responsive">
         <CardNav
-          logo="/logo.svg"
+          logo="/logo-b.svg"
           logoAlt="Company Logo"
           items={items}
           menuColor="#000"
           ease="power3.out"
         />
 
-        <div className="max-w-7xl mx-auto mt-32">
+        <div className="max-w-7xl mx-auto mt-20 sm:mt-24 lg:mt-32">
           {/* Bento Grid Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 h-full">
             {/* Left Column - Profile and Placeholder */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-4 sm:space-y-6">
               <ProfileSection/>
               <PlaceholderSection />
             </div>
 
             {/* Right Column - Chat Summaries and Comparison Reports */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
               <ChatSummariesSection
                 chatSummaries={chatSummaries}
                 onDownload={handleDownloadChatSummary}

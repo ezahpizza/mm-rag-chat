@@ -17,7 +17,7 @@ interface TextParallaxContentProps {
   index: number;
 }
 
-export const TextParallaxContent = ({ category, summary, onLearnMore, index }: TextParallaxContentProps) => {
+export const TextParallaxContent = ({ category, summary, onLearnMore, index: _index }: TextParallaxContentProps) => {
   const imgUrl = getRandomGif(category);
 
   return (

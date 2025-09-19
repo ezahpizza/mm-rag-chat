@@ -136,7 +136,7 @@ export const CardNav = ({
 
   return (
     <div
-      className={`card-nav-container absolute left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-[90] top-[1.2em] md:top-[2em] ${className}`}
+      className={`card-nav-container absolute left-1/2 -translate-x-1/2 w-[95%] sm:w-[90%] max-w-[800px] z-[90] top-[1em] sm:top-[1.2em] md:top-[2em] ${className}`}
     >
       <nav
         ref={navRef}
@@ -163,9 +163,9 @@ export const CardNav = ({
             />
           </div>
 
-          <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
-            <Image src={logo} alt={logoAlt} className="logo h-[28px]" width={28} height={28} />
-          </div>
+          <Link href="/" className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
+            <Image src={logo} alt={logoAlt} className="logo h-[40px]" width={40} height={40} />
+          </Link>
 
           <SignedOut>
             <SignUpButton mode="modal">
