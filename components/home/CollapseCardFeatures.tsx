@@ -30,13 +30,13 @@ export const CollapseCardFeatures = () => {
           </h2>
           <div className="flex gap-2 self-start md:self-auto">
             <button
-              className="h-fit bg-electric p-2 md:p-4 text-lg md:text-2xl text-pearl transition-colors hover:bg-persian"
+              className="h-fit bg-electric p-2 md:p-4 text-lg md:text-2xl text-black transition-colors hover:bg-persian hover:text-pearl"
               onClick={shiftLeft}
             >
               <FiChevronLeft />
             </button>
             <button
-              className="h-fit bg-electric p-2 md:p-4 text-lg md:text-2xl text-pearl transition-colors hover:bg-persian"
+              className="h-fit bg-electric p-2 md:p-4 text-lg md:text-2xl text-black transition-colors hover:bg-persian hover:text-pearl"
               onClick={shiftRight}
             >
               <FiChevronRight />

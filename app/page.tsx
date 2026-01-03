@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Hero, CollapseCardFeatures, ContactCard, PingIcon, Footer } from "@/components/home";
+import { Hero,
+   CollapseCardFeatures, 
+   ContactCard, 
+   PingIcon, 
+   CountUpStats,
+   StaggerTestimonials, 
+   Footer } from "@/components/home";
 import { CardNav, PixelBlast, Loader } from "@/components/global";
 import { items } from "@/constants/home-items";
 
@@ -70,12 +76,13 @@ export default function HomePage() {
         </div>
 
       </div>
-
       <div className="z-20">
         <CollapseCardFeatures />
+        <CountUpStats />
         <div className="hidden md:block">
           <PingIcon />
         </div>
+        <StaggerTestimonials />
         <ContactCard />
       </div>
 

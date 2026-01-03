@@ -16,8 +16,6 @@ export function Footer() {
   const letters = "VRDCT".split("");
   const year = new Date().getFullYear();
 
-  console.log("Footer isInView:", isInView); // Debug log
-
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -45,9 +43,8 @@ export function Footer() {
   };
 
   return (
-    <footer className="w-full h-60 md:h-90 bg-obsidian flex items-center justify-center relative overflow-hidden rounded-t-3xl">
+    <footer className="w-full h-60 md:h-90 bg-electric flex items-center justify-center relative overflow-hidden rounded-t-3xl">
       {/* Background gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/95 to-razza/30" />
       
       {/* Main content */}
       <div ref={ref} className="relative z-10 text-center">
@@ -77,7 +74,7 @@ export function Footer() {
           initial={{ scaleX: 0, opacity: 0 }}
           animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
           transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-          className="h-0.5 bg-gradient-to-r from-transparent via-electric to-transparent mt-4 mx-auto max-w-md"
+          className="h-0.5 bg-gradient-to-r from-transparent via-obsidian to-transparent mt-4 mx-auto max-w-md"
           style={{ transformOrigin: "center" }}
         />
 
@@ -90,9 +87,6 @@ export function Footer() {
         </p>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-persian/10 to-transparent" />
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-electric/10 to-transparent rounded-full blur-3xl" />
     </footer>
   );
 }

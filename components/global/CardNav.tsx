@@ -140,7 +140,7 @@ export const CardNav = ({
     >
       <nav
         ref={navRef}
-        className={`card-nav ${isExpanded ? 'open' : ''} bg-gradient-to-r from-pearl to-cerulean block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
+        className={`card-nav ${isExpanded ? 'open' : ''} bg-pearl block h-[60px] p-0 rounded-xl shadow-md relative overflow-hidden will-change-[height]`}
       >
         <div className="card-nav-top absolute inset-x-0 top-0 h-[60px] flex items-center justify-between p-2 pl-[1.1rem] z-[2]">
           <div
