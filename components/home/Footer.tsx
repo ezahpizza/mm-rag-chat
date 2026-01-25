@@ -2,9 +2,12 @@
 
 import { motion, useInView, Variants } from "framer-motion";
 import { useRef } from "react";
-import { Bebas_Neue } from 'next/font/google';
+import Image from 'next/image';
+import { Zalando_Sans_Expanded } from "next/font/google";
+import DotExpandButton from "../dotExpand";
+import { footerTopLinks, footerBottomLinks } from "@/constants/home-items";
 
-const bebas = Bebas_Neue ({ weight: '400', subsets: ['latin'] });
+const zalando = Zalando_Sans_Expanded ({ subsets: ['latin'] });
 
 export function Footer() {
   const ref = useRef(null);
@@ -43,22 +46,26 @@ export function Footer() {
   };
 
   return (
-    <footer className="w-full h-60 md:h-90 bg-electric flex items-center justify-center relative overflow-hidden rounded-t-3xl">
-      {/* Background gradient overlay */}
-      
-      {/* Main content */}
-      <div ref={ref} className="relative z-10 text-center">
+    <footer className={`${zalando.className} flex items-center justify-center relative overflow-hidden`}>
+
+      <div ref={ref} className="relative z-10 text-center w-7xl h-60 md:h-90 bg-razza m-4 text-left">
+
+        <p className={`text-white/12 text-[10rem] top-0 left-0 absolute tracking-wider leading-none`}>
+          30.9625&deg; N<br />
+          46.1027&deg; E
+        </p>
+        
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="flex items-center justify-center space-x-4 md:space-x-8"
+          className="flex space-x-4 md:space-x-8 bottom-12 left-2 px-6 absolute"
         >
           {letters.map((letter, index) => (
             <motion.span
               key={`${letter}-${index}`}
               variants={letterVariants}
-              className={`${bebas.className} text-6xl md:text-[14rem] font-bold text-pearl drop-shadow-2xl`}
+              className={`text-8xl font-medium text-persian drop-shadow-2xl`}
               style={{
                 transformOrigin: "50% 50%",
                 textShadow: "0 0 30px rgba(139, 103, 255, 0.3)",
@@ -69,22 +76,47 @@ export function Footer() {
           ))}
         </motion.div>
 
-        {/* Subtle accent line */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={isInView ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
-          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
-          className="h-0.5 bg-gradient-to-r from-transparent via-obsidian to-transparent mt-4 mx-auto max-w-md"
-          style={{ transformOrigin: "center" }}
+        <p className="text-cerulean text-sm md:text-base px-6 absolute left-2 top-2">
+          <span className="block">
+            Billable hours, minus the hours. <br/> Get started today.
+          </span>
+          <span className="block mt-24">
+            All Brains. No Suits.
+          </span>
+        </p>
+
+        <Image
+          src="/logo/black-no-text.svg"
+          alt="Logo"
+          width={50}
+          height={39}
+          className="bottom-34 right-12 absolute"
         />
 
-        {/* Additional text or content can go here */}
-        <p
+        <div className="absolute top-4 right-2 flex flex-col items-end gap-3 px-6">
+          {footerTopLinks.map((item) => (
+            <DotExpandButton
+              key={item.label}
+              label={item.label}
+              href={item.href}
+            />
+          ))}
+        </div>
 
-          className={`${bebas.className} text-skye/70 text-sm md:text-base mt-8 max-w-md mx-auto px-4`}
-        >
+        <div className="absolute bottom-4 right-2 flex flex-col items-end gap-3 px-6">
+          {footerBottomLinks.map((item) => (
+            <DotExpandButton
+              key={item.label}
+              label={item.label}
+              href={item.href}
+            />
+          ))}
+        </div>
+
+        <p className={`text-cerulean/70 text-sm md:text-base px-6 bottom-2 left-2 absolute`}>
           &copy; {year} VRDCT. All Rights Reserved.
         </p>
+
       </div>
 
     </footer>

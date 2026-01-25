@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     siteName: 'VRDCT',
     images: [
       {
-        url: '/logo-b.svg',
+        url: '/logo/black-no-text.svg',
         width: 1200,
         height: 630,
         alt: 'VRDCT Logo',
@@ -46,12 +46,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'VRDCT - AI-Powered Legal Document Simplification',
     description: 'Simplify complex legal documents with AI, RAG, and web search. Get clear, concise summaries and comparisons for better understanding.',
-    images: ['/logo-b.svg'],
+    images: ['/logo/black-no-text.svg'],
   },
   icons: {
-    icon: '/logo-b.svg',
-    shortcut: '/logo-b.svg',
-    apple: '/logo-b.svg',
+    icon: '/logo/black-no-text.svg',
+    shortcut: '/logo/black-no-text.svg',
+    apple: '/logo/black-no-text.svg',
   },
 };
 

@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       console.log('Tools created successfully: Documents (RAG) and Web (Tavily)');
 
       result = await streamText({
-        model: google('gemini-2.5-flash'),
+        model: google('gemini-3-flash-preview'),
         messages: convertToCoreMessages(messages),
         tools: {
           Documents: ragTool,
@@ -107,7 +107,7 @@ ${modeInstruction}
       console.error('Error with tools, falling back to simple response:', toolError);
       // Fallback to simple response without tools
       result = await streamText({
-        model: google('gemini-2.5-flash'),
+        model: google('gemini-3-flash-preview'),
         messages: convertToCoreMessages(messages),
         system: `You are a helpful AI assistant. Provide clear and concise responses.
 

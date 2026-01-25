@@ -25,10 +25,10 @@ const MenuDrop = () => {
       <motion.div animate={open ? "open" : "closed"} >
         <button
           onClick={() => setOpen((pv) => !pv)}
-          className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50"
+          className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 "
         >
-          <span className="font-medium text-2xl">Vrdct</span>
-          <motion.span variants={iconVariants}>
+          <span className="font-medium text-2xl">VRDCT</span>
+          <motion.span variants={iconVariants} className="hover:bg-razza transition-colors duration-300 p-2 rounded-md">
             <FiChevronDown />
           </motion.span>
         </button>

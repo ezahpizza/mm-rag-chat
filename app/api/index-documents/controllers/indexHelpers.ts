@@ -126,7 +126,7 @@ Be concise but comprehensive. Do not speculate or add information not visible in
 
     // Use AI SDK for image analysis
     const { text } = await generateText({
-      model: google('gemini-2.5-flash'),
+      model: google('gemini-3-flash-preview'),
       messages: [
         {
           role: 'user',

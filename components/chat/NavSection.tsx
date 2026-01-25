@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   FiChevronsRight,
   FiSave,
@@ -73,13 +74,13 @@ const Sidebar = ({ isOpen, setIsOpen, messages, onClearChat }:SidebarProps) => {
     try {
       const result = await handleSummarizeAndSave(messages);
       if (result.success) {
-        console.log('✅ Summary saved successfully:', result.chatId);
+        console.log(' Summary saved successfully:', result.chatId);
         // You could show a toast notification here
       } else {
-        console.error('❌ Failed to save summary:', result.message);
+        console.error(' Failed to save summary:', result.message);
       }
     } catch (error) {
-      console.error('❌ Error during summarize and save:', error);
+      console.error(' Error during summarize and save:', error);
     } finally {
       setIsProcessing(false);
       setProcessingType(null);
@@ -95,13 +96,13 @@ const Sidebar = ({ isOpen, setIsOpen, messages, onClearChat }:SidebarProps) => {
     try {
       const result = await handleSummarizeAndExport(messages);
       if (result.success) {
-        console.log('✅ Summary saved and exported successfully:', result.chatId);
+        console.log('Summary saved and exported successfully:', result.chatId);
         // You could show a toast notification here
       } else {
-        console.error('❌ Failed to save and export summary:', result.message);
+        console.error('Failed to save and export summary:', result.message);
       }
     } catch (error) {
-      console.error('❌ Error during summarize and export:', error);
+      console.error(' Error during summarize and export:', error);
     } finally {
       setIsProcessing(false);
       setProcessingType(null);
@@ -247,15 +248,18 @@ const Logo = () => {
   return (
     <motion.div
       layout
-      className="grid size-10 shrink-0 place-content-center rounded-md bg-razza"
+      className="grid size-10 shrink-0 place-content-center rounded-md bg-razza hover:bg-electric transition-colors p-1 cursor-pointer duration-300"
     >
-      <Image
-        src="/logo-w.svg"
-        alt="Logo"
-        width={24}
-        height={39}
-        className="w-6 h-auto"
-      />
+      <Link href="/">
+          <Image
+            src="/logo/white-no-text.svg"
+            alt="Logo"
+            width={24}
+            height={39}
+            className="w-6 h-auto"
+          />
+      </Link>
+
     </motion.div>
   );
 };

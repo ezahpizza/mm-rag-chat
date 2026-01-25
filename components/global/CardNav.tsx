@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import Link from 'next/link';
 import Image from 'next/image';

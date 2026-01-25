@@ -9,6 +9,17 @@ import {
 } from "react-icons/fi";
 import { FeatureType } from "@/components/home/types";
 
+export const footerTopLinks = [
+  { label: "TERMS OF SERVICE", href: "/terms" },
+  { label: "PRIVACY POLICY", href: "/privacy" },
+];
+
+export const footerBottomLinks = [
+  { label: "ACCOUNT", href: "/dashboard" },
+  { label: "CONTACT", href: "/contact" },
+  { label: "ABOUT", href: "/about" },
+];
+
 export const items = [
   {
       label: "Cool Stuff", 

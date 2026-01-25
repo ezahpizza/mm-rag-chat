@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -40,9 +41,12 @@ const BlockCard = ({ tag, text, examples }: { tag: string; text: React.ReactNode
         <Typewrite examples={examples} />
         <hr className="border-pearl" />
       </div>
-      <button className="w-full rounded-full border border-persian py-2 text-sm font-medium transition-colors hover:bg-cerulean hover:text-skye">
-        Contact Support
-      </button>
+      <Link href={'/contact'}>
+        <button className="w-full rounded-full border border-persian py-2 text-sm font-medium transition-colors hover:bg-cerulean hover:text-skye">
+          Contact Support
+        </button>
+      </Link>
+
     </div>
   );
 };

@@ -151,7 +151,7 @@ export default function ComparePage() {
             
       <div className="flex-1 scrollbar-hide p-2 sm:p-4 relative z-10 items-center w-full container-responsive">
       <CardNav
-          logo="/logo-b.svg"
+          logo="/logo/black-no-text.svg"
           logoAlt="Company Logo"
           items={items}
           menuColor="#000"

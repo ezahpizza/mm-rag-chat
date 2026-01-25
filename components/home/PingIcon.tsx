@@ -44,7 +44,7 @@ const Logo = () => {
       }}
     >
       <Image
-        src="/logo-w.svg"
+        src="/logo/white-no-text.svg"
         alt="Logo"
         width={50}
         height={39}

@@ -53,7 +53,7 @@ export default function HomePage() {
 
       <div className="flex-1 scrollbar-hide relative z-10 items-center w-full container-responsive">
         <CardNav
-          logo="/logo-b.svg"
+          logo="/logo/black-no-text.svg"
           logoAlt="Company Logo"
           items={items}
           menuColor="#000"

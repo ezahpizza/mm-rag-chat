@@ -68,7 +68,7 @@ export default function ChatInput({
     setFiles(files.filter((_, i) => i !== index));
   };
   return (
-    <div className="bg-ocean rounded-lg sm:rounded-xl py-2 pb-6 sm:pb-10 px-2 sm:px-2 m-1 sm:m-3 relative min-h-16 sm:min-h-20">
+    <div className="bg-skye rounded-lg sm:rounded-xl py-2 pb-6 sm:pb-10 px-2 sm:px-2 m-1 sm:m-3 relative min-h-16 sm:min-h-20">
       <fieldset className="grid p-2 sm:grid-flow-col sm:grid-cols-[minmax(0,_1fr)_auto] sm:gap-2 w-full rounded-2xl sm:rounded-3xl backdrop-blur-xl disabled:bg-white/50">
         <form
           onSubmit={handleSubmit}

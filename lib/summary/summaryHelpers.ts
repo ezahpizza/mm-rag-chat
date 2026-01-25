@@ -69,7 +69,7 @@ Create a detailed summary that captures the essence and value of this legal cons
 
   // Generate detailed summary using Gemini
   const summaryResult = await generateText({
-    model: google('gemini-2.5-flash'),
+    model: google('gemini-3-flash-preview'),
     messages: [
       {
         role: 'system',
