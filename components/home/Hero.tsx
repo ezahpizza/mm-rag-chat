@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { FiArrowDownCircle } from "react-icons/fi";
 import { Bebas_Neue } from 'next/font/google';
 

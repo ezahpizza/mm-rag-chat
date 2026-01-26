@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useChat, type Message } from 'ai/react';
 import { useUser } from '@clerk/nextjs';
 import { motion } from 'framer-motion';

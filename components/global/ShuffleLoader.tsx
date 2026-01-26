@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, useAnimate } from "framer-motion";
 import { PixelBlast } from '@/components/global';
 

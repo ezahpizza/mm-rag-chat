@@ -1,14 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GenZAnalysisResult } from '@/lib/analyzeGenZ';
 import { TextParallaxContent, DragCloseDrawer } from '@/components/genZAnalyze';
-
 import { SpringModal, PixelBlast, CardNav, Loader, DocumentUpload } from '@/components/global';
 import { items } from '@/constants/home-items';
 import { FiInfo } from 'react-icons/fi';
 import { SiPopos } from "react-icons/si";
-
 
 export default function GenZAnalyzePage() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -17,13 +15,12 @@ export default function GenZAnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedResult, setSelectedResult] = useState<GenZAnalysisResult | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
       const timer = setTimeout(() => {
           setLoading(false);
-      }, 2000); // 2 second delay for loading screen
+      }, 2000);
 
       return () => clearTimeout(timer);
   }, []);

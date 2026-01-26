@@ -59,7 +59,7 @@ export function Footer() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="flex space-x-4 md:space-x-8 bottom-12 left-2 px-6 absolute"
+          className="flex space-x-4 md:space-x-8 bottom-12 left-2 px-8 absolute"
         >
           {letters.map((letter, index) => (
             <motion.span
@@ -76,7 +76,7 @@ export function Footer() {
           ))}
         </motion.div>
 
-        <p className="text-cerulean text-sm md:text-base px-6 absolute left-2 top-2">
+        <p className="text-cerulean text-sm md:text-base px-8 absolute left-2 top-2">
           <span className="block">
             Billable hours, minus the hours. <br/> Get started today.
           </span>
@@ -113,7 +113,7 @@ export function Footer() {
           ))}
         </div>
 
-        <p className={`text-cerulean/70 text-sm md:text-base px-6 bottom-2 left-2 absolute`}>
+        <p className={`text-cerulean/70 text-sm md:text-base px-8 bottom-2 left-2 absolute`}>
           &copy; {year} VRDCT. All Rights Reserved.
         </p>
 

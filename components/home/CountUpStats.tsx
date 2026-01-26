@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { animate, useInView } from "framer-motion";
 
 export const CountUpStats = () => {
@@ -6,23 +6,23 @@ export const CountUpStats = () => {
     <div className="mx-auto max-w-3xl px-4 py-20 md:py-24">
       <div className="flex flex-col items-center justify-center sm:flex-row">
         <Stat
-          num={45}
+          num={80}
           suffix="%"
-          subheading="Lorem ipsum dolor sit amet consectetur"
+          subheading="of all inefficient behavior in delayed cases attributed to counsel, rather than the court."
         />
         <div className="h-[1px] w-12 bg-indigo-200 sm:h-12 sm:w-[1px]" />
-        <Stat
-          num={15.5}
-          decimals={1}
-          suffix="K+"
-          subheading="Lorem ipsum dolor sit amet consectetur"
-        />
+          <Stat
+            num={6.9}
+            suffix="M+"
+            subheading=" awarded against legal malpractice, just in Missouri, USA averaging more than $230K"
+          />
+
         <div className="h-[1px] w-12 bg-indigo-200 sm:h-12 sm:w-[1px]" />
-        <Stat
-          num={20}
-          suffix="B+"
-          subheading="Lorem ipsum dolor sit amet consectetur"
-        />
+          <Stat
+            num={54}
+            suffix="%"
+            subheading="of highly complaint-prone lawyers exhibit low conscientiousness and often missed deadlines."
+          />
       </div>
     </div>
   );
@@ -56,7 +56,7 @@ const Stat = ({ num, suffix, decimals = 0, subheading }: {
         <span ref={ref}></span>
         {suffix}
       </p>
-      <p className="max-w-48 text-center text-skye">{subheading}</p>
+      <p className="max-w-48 text-center text-skye bg-razza">{subheading}</p>
     </div>
   );
 };

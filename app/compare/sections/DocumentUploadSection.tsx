@@ -1,5 +1,4 @@
 
-import React from 'react';
 import {  DocumentUpload } from '@/components/global';
 import { DocumentUploadSectionProps } from '@/components/compare/types';
 

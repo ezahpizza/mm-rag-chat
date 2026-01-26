@@ -1,4 +1,3 @@
-import React from 'react';
 import { ErrorDisplayProps } from '@/components/compare/types';
 import { FiInfo } from 'react-icons/fi';
 import { MdCompare } from "react-icons/md";

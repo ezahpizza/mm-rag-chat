@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://vrdct.vercel.app'),
   title: 'VRDCT',
   description: 'Simplify complex legal documents with AI, RAG, and web search. Get clear, concise summaries and comparisons for better understanding.',
-  keywords: ['legal documents', 'AI simplification', 'RAG', 'web search', 'document comparison', 'legal tech'],
+  keywords: ['legal documents', 'AI legal simplification', 'RAG', 'web search', 'document comparison', 'legal tech'],
   authors: [{ name: 'Prateek Mohapatra' }],
   creator: 'VRDCT',
   publisher: 'VRDCT',
@@ -64,7 +64,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={cn(caudex.className, 'min-h-screen')} suppressHydrationWarning={true}> 
+      <body className={cn(caudex.className, 'min-h-screen select-none')} suppressHydrationWarning={true}> 
         <ClientWrapper>{children}</ClientWrapper>
       </body>
     </html>

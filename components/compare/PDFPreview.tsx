@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { X, FileText, Download } from 'lucide-react';
 import { Button } from '../button';
 import { PDFPreviewProps, PreviewHeaderProps, PreviewContentProps, ErrorStateProps, PreviewFooterProps } from './types';

@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Spinner } from '../spinner';
 import { type Message } from 'ai/react';

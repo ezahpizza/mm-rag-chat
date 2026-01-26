@@ -1,4 +1,4 @@
-import React from "react";
+"use client";
 import useMeasure from "react-use-measure";
 import {
   useDragControls,

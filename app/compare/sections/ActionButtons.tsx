@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@/components/button';
 import { ActionButtonsProps } from '@/components/compare/types';
 import { FiDownload } from 'react-icons/fi';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {  FiChevronLeft, FiChevronRight} from "react-icons/fi";
 import { TESTIMONIAL_DATA } from "@/constants/home-items";
