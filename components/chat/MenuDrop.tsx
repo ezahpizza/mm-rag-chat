@@ -1,15 +1,15 @@
-import {
-  FiChevronDown,
-  FiHome 
-} from "react-icons/fi";
+import React, { useState } from "react";
+import {FiChevronDown, FiHome } from "react-icons/fi";
 import { MdCompare } from "react-icons/md";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { wrapperVariants, itemVariants, actionIconVariants, iconVariants } from "./dropVariants";
 import { SiPopos } from "react-icons/si";
+import { motion } from "framer-motion";
 
+import { wrapperVariants, itemVariants, actionIconVariants, iconVariants } from "./dropVariants";
+
+import { useRouter } from "next/navigation";
+import { Zalando_Sans_Expanded } from "next/font/google";
+
+const zalando = Zalando_Sans_Expanded ({ subsets: ['latin'] });
 
 const MenuDrop = () => {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ const MenuDrop = () => {
           onClick={() => setOpen((pv) => !pv)}
           className="flex items-center gap-2 px-3 py-2 rounded-md text-indigo-50 "
         >
-          <span className="font-medium text-2xl">VRDCT</span>
+          <span className={`${zalando.className} font-medium text-2xl`}>VRDCT</span>
           <motion.span variants={iconVariants} className="hover:bg-razza transition-colors duration-300 p-2 rounded-md">
             <FiChevronDown />
           </motion.span>

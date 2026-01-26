@@ -56,7 +56,7 @@ Rules:
 
   // Use Gemini's multimodal capabilities to process PDF directly
   const { text: raw } = await generateText({
-    model: google('gemini-3-pro-preview'),
+    model: google('gemini-3-flash-preview'),
     messages: [
       {
         role: 'system',
